@@ -1,8 +1,8 @@
 package com.chisondo.server.datasources;
 
 import com.chisondo.server.datasources.annotation.DataSource;
-import com.chisondo.server.modules.app.entity.UserEntity;
-import com.chisondo.server.modules.app.service.UserService;
+import com.chisondo.server.modules.user.entity.UserSchemeEntity;
+import com.chisondo.server.modules.user.service.UserSchemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class DataSourceTestService {
     @Autowired
-    private UserService userService;
+    private UserSchemeService userService;
 
-    public UserEntity queryObject(Long userId){
-        return userService.queryObject(userId);
+    public UserSchemeEntity queryObject(Integer id){
+        return userService.queryObject(id);
     }
 
     @DataSource(name = DataSourceNames.SECOND)
-    public UserEntity queryObject2(Long userId){
-        return userService.queryObject(userId);
+    public UserSchemeEntity queryObject2(Integer id){
+        return userService.queryObject(id);
     }
 }

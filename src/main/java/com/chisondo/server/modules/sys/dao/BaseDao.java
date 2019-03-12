@@ -1,4 +1,4 @@
-package com.chisondo.server.modules.devctrl.dao;
+package com.chisondo.server.modules.sys.dao;
 
 
 import java.util.List;

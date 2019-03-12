@@ -6,17 +6,17 @@ spring:
       driverClassName: com.mysql.jdbc.Driver
       druid:
           first:  #数据源1
-              url: jdbc:mysql://120.25.121.248:3307/chisondo?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+              url: jdbc:mysql://47.111.167.92:3306/chisondo?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
               username: teaman
-              password: qsd-a123
+              password: AE6y@dNf
           second:  #数据源2
-              url: jdbc:mysql://120.25.121.248:3307/chisondo?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+              url: jdbc:mysql://47.111.167.92:3306/chisondo?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
               username: teaman
-              password: qsd-a123
+              password: AE6y@dNf
           third:  #数据源3
-              url: jdbc:mysql://120.25.121.248:3307/chisondo?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+              url: jdbc:mysql://47.111.167.92:3306/chisondo?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
               username: teaman
-              password: qsd-a123
+              password: AE6y@dNf
           initial-size: 10
           max-active: 100
           min-idle: 10

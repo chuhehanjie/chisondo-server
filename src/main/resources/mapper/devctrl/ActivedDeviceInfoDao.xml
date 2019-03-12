@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.chisondo.server.modules.devctrl.dao.ActivedDeviceInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.chisondo.server.modules.devctrl.entity.ActivedDeviceInfoEntity" id="activedDeviceInfoMap">
+        <result property="deviceId" column="device_id"/>
+        <result property="deviceName" column="device_name"/>
+        <result property="deviceTypeId" column="device_type_id"/>
+        <result property="activedTime" column="actived_time"/>
+        <result property="password" column="password"/>
+        <result property="devColor" column="dev_color"/>
+        <result property="termId" column="term_id"/>
+        <result property="devDesc" column="dev_desc"/>
+        <result property="adminName" column="admin_name"/>
+        <result property="adminPhone" column="admin_phone"/>
+        <result property="restId" column="rest_id"/>
+        <result property="lockPanel" column="lock_panel"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.chisondo.server.modules.devctrl.entity.ActivedDeviceInfoEntity">
+		select * from tb_actived_device_info where device_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.chisondo.server.modules.devctrl.entity.ActivedDeviceInfoEntity">
+		select * from tb_actived_device_info where 1=1
+			<if test="deviceId != null and deviceId !='' ">
+				AND device_id = #{deviceId}
+			</if>
+				<if test="deviceName != null and deviceName !='' ">
+				AND device_name = #{deviceName}
+			</if>
+				<if test="deviceTypeId != null and deviceTypeId !='' ">
+				AND device_type_id = #{deviceTypeId}
+			</if>
+				<if test="activedTime != null and activedTime !='' ">
+				AND actived_time = #{activedTime}
+			</if>
+				<if test="password != null and password !='' ">
+				AND password = #{password}
+			</if>
+				<if test="devColor != null and devColor !='' ">
+				AND dev_color = #{devColor}
+			</if>
+				<if test="termId != null and termId !='' ">
+				AND term_id = #{termId}
+			</if>
+				<if test="devDesc != null and devDesc !='' ">
+				AND dev_desc = #{devDesc}
+			</if>
+				<if test="adminName != null and adminName !='' ">
+				AND admin_name = #{adminName}
+			</if>
+				<if test="adminPhone != null and adminPhone !='' ">
+				AND admin_phone = #{adminPhone}
+			</if>
+				<if test="restId != null and restId !='' ">
+				AND rest_id = #{restId}
+			</if>
+				<if test="lockPanel != null and lockPanel !='' ">
+				AND lock_panel = #{lockPanel}
+			</if>
+		        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by device_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from tb_actived_device_info where 1=1
+			<if test="deviceId != null and deviceId !='' ">
+                AND device_id = #{deviceId}
+            </if>
+				<if test="deviceName != null and deviceName !='' ">
+                AND device_name = #{deviceName}
+            </if>
+				<if test="deviceTypeId != null and deviceTypeId !='' ">
+                AND device_type_id = #{deviceTypeId}
+            </if>
+				<if test="activedTime != null and activedTime !='' ">
+                AND actived_time = #{activedTime}
+            </if>
+				<if test="password != null and password !='' ">
+                AND password = #{password}
+            </if>
+				<if test="devColor != null and devColor !='' ">
+                AND dev_color = #{devColor}
+            </if>
+				<if test="termId != null and termId !='' ">
+                AND term_id = #{termId}
+            </if>
+				<if test="devDesc != null and devDesc !='' ">
+                AND dev_desc = #{devDesc}
+            </if>
+				<if test="adminName != null and adminName !='' ">
+                AND admin_name = #{adminName}
+            </if>
+				<if test="adminPhone != null and adminPhone !='' ">
+                AND admin_phone = #{adminPhone}
+            </if>
+				<if test="restId != null and restId !='' ">
+                AND rest_id = #{restId}
+            </if>
+				<if test="lockPanel != null and lockPanel !='' ">
+                AND lock_panel = #{lockPanel}
+            </if>
+			</select>
+	 
+	<insert id="save" parameterType="com.chisondo.server.modules.devctrl.entity.ActivedDeviceInfoEntity">
+		insert into tb_actived_device_info
+		(
+			`device_id`, 
+			`device_name`, 
+			`device_type_id`, 
+			`actived_time`, 
+			`password`, 
+			`dev_color`, 
+			`term_id`, 
+			`dev_desc`, 
+			`admin_name`, 
+			`admin_phone`, 
+			`rest_id`, 
+			`lock_panel`
+		)
+		values
+		(
+			#{deviceId}, 
+			#{deviceName}, 
+			#{deviceTypeId}, 
+			#{activedTime}, 
+			#{password}, 
+			#{devColor}, 
+			#{termId}, 
+			#{devDesc}, 
+			#{adminName}, 
+			#{adminPhone}, 
+			#{restId}, 
+			#{lockPanel}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.chisondo.server.modules.devctrl.entity.ActivedDeviceInfoEntity">
+		update tb_actived_device_info 
+		<set>
+			<if test="deviceName != null">`device_name` = #{deviceName}, </if>
+			<if test="deviceTypeId != null">`device_type_id` = #{deviceTypeId}, </if>
+			<if test="activedTime != null">`actived_time` = #{activedTime}, </if>
+			<if test="password != null">`password` = #{password}, </if>
+			<if test="devColor != null">`dev_color` = #{devColor}, </if>
+			<if test="termId != null">`term_id` = #{termId}, </if>
+			<if test="devDesc != null">`dev_desc` = #{devDesc}, </if>
+			<if test="adminName != null">`admin_name` = #{adminName}, </if>
+			<if test="adminPhone != null">`admin_phone` = #{adminPhone}, </if>
+			<if test="restId != null">`rest_id` = #{restId}, </if>
+			<if test="lockPanel != null">`lock_panel` = #{lockPanel}</if>
+		</set>
+		where device_id = #{deviceId}
+	</update>
+	
+	<delete id="delete">
+		delete from tb_actived_device_info where device_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from tb_actived_device_info where device_id in 
+		<foreach item="deviceId" collection="array" open="(" separator="," close=")">
+			#{deviceId}
+		</foreach>
+	</delete>
+
+</mapper>

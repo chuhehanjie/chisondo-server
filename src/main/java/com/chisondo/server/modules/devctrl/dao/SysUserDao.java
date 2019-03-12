@@ -1,6 +1,7 @@
 package com.chisondo.server.modules.devctrl.dao;
 
 import com.chisondo.server.modules.devctrl.entity.SysUserEntity;
+import com.chisondo.server.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

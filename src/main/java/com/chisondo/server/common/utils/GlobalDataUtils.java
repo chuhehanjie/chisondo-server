@@ -1,3 +1,4 @@
+/*
 package com.chisondo.server.common.utils;
 
 import com.chisondo.server.modules.devctrl.entity.SysConfigEntity;
@@ -87,3 +88,4 @@ public final class GlobalDataUtils {
 
 
 }
+*/

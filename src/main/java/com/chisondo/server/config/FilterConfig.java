@@ -15,10 +15,10 @@ import javax.servlet.DispatcherType;
  * @email 258321511@qq.com
  * @date 2019年3月7日
  */
-@Configuration
+//@Configuration
 public class FilterConfig {
 
-    @Bean
+//    @Bean
     public FilterRegistrationBean shiroFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new DelegatingFilterProxy("shiroFilter"));
@@ -30,7 +30,7 @@ public class FilterConfig {
         return registration;
     }
 
-    @Bean
+//    @Bean
     public FilterRegistrationBean xssFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setDispatcherTypes(DispatcherType.REQUEST);

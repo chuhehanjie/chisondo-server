@@ -1,7 +1,7 @@
 package com.chisondo.server.config;
 
-import com.chisondo.server.modules.devctrl.oauth2.OAuth2Filter;
-import com.chisondo.server.modules.devctrl.oauth2.OAuth2Realm;
+//import com.chisondo.server.modules.devctrl.oauth2.OAuth2Filter;
+//import com.chisondo.server.modules.devctrl.oauth2.OAuth2Realm;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -28,7 +28,7 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
-    @Bean("sessionManager")
+    /*@Bean("sessionManager")
     public SessionManager sessionManager(){
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setSessionValidationSchedulerEnabled(true);
@@ -44,15 +44,15 @@ public class ShiroConfig {
 
         return securityManager;
     }
-
-    @Bean("shiroFilter")
+*/
+//    @Bean("shiroFilter")
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
 
         //oauth过滤
         Map<String, Filter> filters = new HashMap<>();
-        filters.put("oauth2", new OAuth2Filter());
+//        filters.put("oauth2", new OAuth2Filter());
         shiroFilter.setFilters(filters);
 
         Map<String, String> filterMap = new LinkedHashMap<>();
@@ -80,7 +80,7 @@ public class ShiroConfig {
         return shiroFilter;
     }
 
-    @Bean("lifecycleBeanPostProcessor")
+   /* @Bean("lifecycleBeanPostProcessor")
     public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
     }
@@ -97,6 +97,6 @@ public class ShiroConfig {
         AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
         advisor.setSecurityManager(securityManager);
         return advisor;
-    }
+    }*/
 
 }
