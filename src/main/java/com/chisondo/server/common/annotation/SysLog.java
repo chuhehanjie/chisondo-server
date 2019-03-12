@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * 
  * @author ding.zhong
  * @email 258321511@qq.com
- * @date 2019年3月7日
+ * @date Mar 12.19
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

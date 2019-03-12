@@ -18,7 +18,7 @@ import java.util.Map;
  * XSS过滤处理
  * @author ding.zhong
  * @email 258321511@qq.com
- * @date 2019年3月7日
+ * @date Mar 12.19
  */
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
     //没被包装过的HttpServletRequest（特殊场景，需要自己过滤）

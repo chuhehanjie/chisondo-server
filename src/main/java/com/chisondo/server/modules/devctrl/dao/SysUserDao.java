@@ -12,7 +12,7 @@ import java.util.Map;
  * 
  * @author ding.zhong
  * @email 258321511@qq.com
- * @date 2019年3月7日
+ * @date Mar 12.19
  */
 @Mapper
 public interface SysUserDao extends BaseDao<SysUserEntity> {

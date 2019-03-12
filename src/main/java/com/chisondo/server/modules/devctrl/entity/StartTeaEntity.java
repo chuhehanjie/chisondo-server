@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 开启或预约泡茶 entity
  * @author ding.zhong
  * @email 258321511@qq.com
- * @date 2019年3月7日
+ * @date Mar 12.19
  */
 public class StartTeaEntity implements Serializable {
 	private static final long serialVersionUID = 1L;

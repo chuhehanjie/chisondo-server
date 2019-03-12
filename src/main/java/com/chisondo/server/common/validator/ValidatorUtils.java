@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * @author ding.zhong
  * @email 258321511@qq.com
- * @date 2019年3月7日
+ * @date Mar 12.19
  */
 public class ValidatorUtils {
     private static Validator validator;

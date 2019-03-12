@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 设备控制
+ * 设备控制 controller
  * @author ding.zhong
  * @email 258321511@qq.com
- * @date 2019年3月7日
+ * @date Mar 12.19
  */
 @RestController
-@RequestMapping("/rest/startWorking")
 public class DeviceCtrlController extends AbstractController {
 
 	/**
@@ -39,6 +38,39 @@ public class DeviceCtrlController extends AbstractController {
 		/*retn	Y	Integer	返回码
 		desc	Y	String	返回描述
 		reservNo	N	Integer	预约号	预约泡茶时返回预约号*/
+		return new CommonResp();
+	}
+
+	/**
+	 * 绑定沏茶器（添加设备）
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping("/api/rest/connectDevice")
+	public CommonResp bindDevice(@RequestBody CommonReq req) {
+		/*输入参数	是否必填	参数类型	说明	备注
+		deviceId	Y	String	设备ID
+		phoneNum	Y	String	手机号码	设备绑定的手机号码
+		companyId	Y	int	所属企业id	0-泉笙道，1-湘丰集团，2-静硒园,345….,默认-1，表示还没有绑定企业，第一次时修改，不为-1时，不允许再修改
+		longitude	Y	String	经度	手机定位
+		latitude	Y	String	维度
+		province	Y	String	省
+		city	Y	String	市
+		district	Y	String	区
+		detaddress	Y	String	详细地址
+		passwd	Y	String	设备密码	需md5加密，默认密码（123456）
+		响应参数
+		输出参数	是否必填	参数类型	说明	备注
+		retn	Y	Integer	返回码
+		desc	Y	String	返回描述
+		errCode	N	Integer	错误标识	连接失败原因：1-设备不存在；2-设备离线；3-设备已被其他用户占用；4-密码错误
+		以下内容在添加（绑定）成功时才返回
+		deviceId	Y	Integer	设备ID
+		deviceName	Y	String	设备名称
+		companyId	Y	int	所属企业id
+		companyName	Y	int	所属企业名称	,0-泉笙道，1-湘丰集团，2-静硒园,345….,默认 0泉笙道
+		deviceDesc	Y	String	设备描述*/
+
 		return new CommonResp();
 	}
 	

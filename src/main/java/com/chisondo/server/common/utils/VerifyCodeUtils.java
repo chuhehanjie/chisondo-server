@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * @author hewei
  * @version V.1.0.0
- * @date 2019年3月7日
+ * @date Mar 12.19
  */
 public class VerifyCodeUtils {
 

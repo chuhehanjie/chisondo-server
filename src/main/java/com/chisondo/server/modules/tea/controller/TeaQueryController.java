@@ -1,4 +1,4 @@
-package com.chisondo.server.modules.devctrl.controller;
+package com.chisondo.server.modules.tea.controller;
 
 import java.util.Map;
 
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.chisondo.server.modules.devctrl.service.DeviceTypeService;
+import com.chisondo.server.modules.tea.service.TeamanUserService;
 import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
 
@@ -17,24 +17,24 @@ import com.chisondo.server.common.http.CommonResp;
 
 
 /**
- * 
- * 
+ * 茶类信息查询 controller
  * @author ding.zhong
  * @email 258321511@qq.com
  * @since Mar 12.19
  */
 @RestController
-@RequestMapping("/devctrl/devicetype")
-public class DeviceTypeController {
+@RequestMapping("/api/rest/chapu")
+public class TeaQueryController {
 	@Autowired
-	private DeviceTypeService deviceTypeService;
+	private TeamanUserService teamanUserService;
 	
 	/**
-	 * 列表
+	 * 查询所有茶类信息
 	 */
-	@PostMapping("/list")
-	public CommonResp list(@RequestBody Map<String, Object> params){
-        return new CommonResp();
+	@PostMapping("/getsorts")
+	public CommonResp queryAllTeaSort(@RequestBody CommonReq req){
+
+	    return new CommonResp();
 	}
 
 }

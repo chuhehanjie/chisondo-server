@@ -14,7 +14,7 @@ import java.util.Map;
  * 配置多数据源
  * @author ding.zhong
  * @email 258321511@qq.com
- * @date 2019年3月7日
+ * @date Mar 12.19
  */
 @Configuration
 public class DynamicDataSourceConfig {
