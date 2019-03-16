@@ -32,12 +32,6 @@ public class DynamicDataSourceConfig {
     }
 
     @Bean
-    @ConfigurationProperties("spring.datasource.druid.third")
-    public DataSource thirdDataSource(){
-        return DruidDataSourceBuilder.create().build();
-    }
-
-    @Bean
     @Primary
     public DynamicDataSource dataSource(DataSource firstDataSource, DataSource secondDataSource) {
         Map<String, DataSource> targetDataSources = new HashMap<>();

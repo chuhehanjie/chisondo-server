@@ -1,5 +1,8 @@
 package com.chisondo.server.common.http;
 
+import com.alibaba.fastjson.JSONObject;
+import org.apache.http.HttpStatus;
+
 import java.io.Serializable;
 
 public class CommonResp implements Serializable {
@@ -19,6 +22,35 @@ public class CommonResp implements Serializable {
      * 使用json格式转换成字符串，并进行加密，形成密文,具体参数见具体接口
      */
     private String bizBody;
+
+    public static CommonResp ok(Object obj) {
+        return new CommonResp(HttpStatus.SC_OK, "success", JSONObject.toJSONString(obj));
+    }
+
+    public static CommonResp error(String errMsg) {
+        CommonResp resp = new CommonResp(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        resp.setDesc(errMsg);
+        return resp;
+    }
+
+    public static CommonResp error(Integer errCode, String errMsg) {
+        CommonResp resp = new CommonResp(errCode);
+        resp.setDesc(errMsg);
+        return resp;
+    }
+
+    public CommonResp() {
+    }
+
+    public CommonResp(Integer retn) {
+        this.retn = retn;
+    }
+
+    public CommonResp(Integer retn, String desc, String bizBody) {
+        this.retn = retn;
+        this.desc = desc;
+        this.bizBody = bizBody;
+    }
 
     public Integer getRetn() {
         return retn;

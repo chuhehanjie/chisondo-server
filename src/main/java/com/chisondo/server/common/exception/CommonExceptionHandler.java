@@ -1,6 +1,6 @@
 package com.chisondo.server.common.exception;
 
-import com.chisondo.server.common.utils.CommonResponse;
+import com.chisondo.server.common.http.CommonResp;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,25 +23,25 @@ public class CommonExceptionHandler {
 	 * 处理自定义异常
 	 */
 	@ExceptionHandler(CommonException.class)
-	public CommonResponse handleCommonException(CommonException e){
-		return CommonResponse.error(e.getCode(), e.getMsg());
+	public CommonResp handleCommonException(CommonException e){
+		return CommonResp.error(e.getCode(), e.getMsg());
 	}
 
 	@ExceptionHandler(DuplicateKeyException.class)
-	public CommonResponse handleDuplicateKeyException(DuplicateKeyException e){
+	public CommonResp handleDuplicateKeyException(DuplicateKeyException e){
 		logger.error(e.getMessage(), e);
-		return CommonResponse.error("数据库中已存在该记录");
+		return CommonResp.error("数据库中已存在该记录");
 	}
 
 	@ExceptionHandler(AuthorizationException.class)
-	public CommonResponse handleAuthorizationException(AuthorizationException e){
+	public CommonResp handleAuthorizationException(AuthorizationException e){
 		logger.error(e.getMessage(), e);
-		return CommonResponse.error("没有权限，请联系管理员授权");
+		return CommonResp.error("没有权限，请联系管理员授权");
 	}
 
 	@ExceptionHandler(Exception.class)
-	public CommonResponse handleException(Exception e){
+	public CommonResp handleException(Exception e){
 		logger.error(e.getMessage(), e);
-		return CommonResponse.error(e.getMessage());
+		return CommonResp.error(e.getMessage());
 	}
 }

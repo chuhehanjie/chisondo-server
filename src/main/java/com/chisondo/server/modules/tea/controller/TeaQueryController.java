@@ -1,8 +1,17 @@
 package com.chisondo.server.modules.tea.controller;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.chisondo.server.datasources.DataSourceNames;
+import com.chisondo.server.datasources.annotation.DataSource;
+import com.chisondo.server.modules.tea.dto.TeaSortQryDTO;
+import com.chisondo.server.modules.tea.dto.TeaSortRowDTO;
+import com.chisondo.server.modules.tea.entity.AppTeaSortEntity;
+import com.chisondo.server.modules.tea.service.AppTeaSortService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,18 +32,25 @@ import com.chisondo.server.common.http.CommonResp;
  * @since Mar 12.19
  */
 @RestController
-@RequestMapping("/api/rest/chapu")
 public class TeaQueryController {
 	@Autowired
 	private TeamanUserService teamanUserService;
-	
+
+	@Autowired
+	private AppTeaSortService appTeaSortService;
 	/**
 	 * 查询所有茶类信息
 	 */
-	@PostMapping("/getsorts")
+	@PostMapping("/api/rest/chapu/getsorts")
+	@DataSource(name = DataSourceNames.SECOND)
 	public CommonResp queryAllTeaSort(@RequestBody CommonReq req){
-
-	    return new CommonResp();
+		List<TeaSortRowDTO> teaSorts = this.appTeaSortService.queryAllTeaSorts();
+		TeaSortQryDTO teaSortQryDTO = new TeaSortQryDTO();
+		if (!CollectionUtils.isEmpty(teaSorts)) {
+			teaSortQryDTO.setDefaultSortId(teaSorts.get(0).getSortId()); // TODO 设置默认茶类为第1个
+			teaSortQryDTO.setRows(teaSorts);
+		}
+		return CommonResp.ok(teaSortQryDTO);
 	}
 
 }
