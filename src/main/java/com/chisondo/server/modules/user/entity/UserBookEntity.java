@@ -9,7 +9,7 @@ import java.util.Date;
  * 
  * @author ding.zhong
  * @email 258321511@qq.com
- * @since Mar 12.19
+ * @since Mar 18.19
  */
 public class UserBookEntity  implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -26,7 +26,9 @@ public class UserBookEntity  implements Serializable {
 	private Date processTime;
 	//
 	private Date logTime;
-	//
+	/**
+	 * 0-有效; 1-已成功执行; 2-已取消; 3-已过期且未成功执行
+	 */
 	private Integer validFlag;
 	//
 	private Integer chapuId;
@@ -38,6 +40,8 @@ public class UserBookEntity  implements Serializable {
 	private Integer teaSortId;
 	//
 	private String teaSortName;
+	//预约号
+	private String reservNo;
 
 	public void setId(Integer id) {
 		this.id = id;
@@ -122,5 +126,12 @@ public class UserBookEntity  implements Serializable {
 
 	public String getTeaSortName() {
 		return teaSortName;
+	}
+	public void setReservNo(String reservNo) {
+		this.reservNo = reservNo;
+	}
+
+	public String getReservNo() {
+		return reservNo;
 	}
 }

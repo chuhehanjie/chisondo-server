@@ -75,4 +75,8 @@ public class CommonResp implements Serializable {
     public void setBizBody(String bizBody) {
         this.bizBody = bizBody;
     }
+
+    public static CommonResp ok() {
+        return new CommonResp(HttpStatus.SC_OK);
+    }
 }

@@ -1,5 +1,7 @@
 package com.chisondo.server.modules.user.service.impl;
 
+import com.chisondo.server.common.utils.Constant;
+import com.chisondo.server.modules.device.dto.DeviceBindReqDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +53,14 @@ public class UserDeviceServiceImpl implements UserDeviceService {
 	public void deleteBatch(Integer[] ids){
 		userDeviceDao.deleteBatch(ids);
 	}
-	
+
+	@Override
+	public void save(DeviceBindReqDTO devBindReq, Long userId) {
+		UserDeviceEntity userDevice = new UserDeviceEntity();
+		userDevice.setTeamanId(userId.toString());
+		userDevice.setDeviceId(Integer.valueOf(devBindReq.getDeviceId()));
+		userDevice.setPrivateTag(Constant.DevPrivateTag.NO);
+		userDevice.setDefaultTag(Constant.DevDefaultTag.NO);
+		this.save(userDevice);
+	}
 }

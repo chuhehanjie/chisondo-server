@@ -1,5 +1,6 @@
 package com.chisondo.server.modules.user.service;
 
+import com.chisondo.server.modules.device.dto.DeviceBindReqDTO;
 import com.chisondo.server.modules.user.entity.UserDeviceEntity;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface UserDeviceService {
 	void delete(Integer id);
 	
 	void deleteBatch(Integer[] ids);
+
+	void save(DeviceBindReqDTO devBindReq, Long userId);
 }

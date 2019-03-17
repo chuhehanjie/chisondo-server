@@ -1,7 +1,7 @@
 package com.chisondo.server.config;
 
-//import com.chisondo.server.modules.devctrl.oauth2.OAuth2Filter;
-//import com.chisondo.server.modules.devctrl.oauth2.OAuth2Realm;
+//import com.chisondo.server.modules.device.oauth2.OAuth2Filter;
+//import com.chisondo.server.modules.device.oauth2.OAuth2Realm;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;

@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 
  * @author ding.zhong
  * @email 258321511@qq.com
- * @since Mar 12.19
+ * @since Mar 17.19
  */
 @Mapper
 public interface TeamanUserDao extends BaseDao<TeamanUserEntity> {

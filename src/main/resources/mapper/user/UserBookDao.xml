@@ -17,6 +17,7 @@
         <result property="informFlag" column="inform_flag"/>
         <result property="teaSortId" column="tea_sort_id"/>
         <result property="teaSortName" column="tea_sort_name"/>
+        <result property="reservNo" column="reserv_no"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.chisondo.server.modules.user.entity.UserBookEntity">
@@ -60,6 +61,9 @@
 			</if>
 				<if test="teaSortName != null and teaSortName !='' ">
 				AND tea_sort_name = #{teaSortName}
+			</if>
+				<if test="reservNo != null and reservNo !='' ">
+				AND reserv_no = #{reservNo}
 			</if>
 		        <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -112,6 +116,9 @@
 				<if test="teaSortName != null and teaSortName !='' ">
                 AND tea_sort_name = #{teaSortName}
             </if>
+				<if test="reservNo != null and reservNo !='' ">
+                AND reserv_no = #{reservNo}
+            </if>
 			</select>
 	 
 	<insert id="save" parameterType="com.chisondo.server.modules.user.entity.UserBookEntity" useGeneratedKeys="true" keyProperty="id">
@@ -127,7 +134,8 @@
 			`chapu_name`, 
 			`inform_flag`, 
 			`tea_sort_id`, 
-			`tea_sort_name`
+			`tea_sort_name`, 
+			`reserv_no`
 		)
 		values
 		(
@@ -141,7 +149,8 @@
 			#{chapuName}, 
 			#{informFlag}, 
 			#{teaSortId}, 
-			#{teaSortName}
+			#{teaSortName}, 
+			#{reservNo}
 		)
 	</insert>
 	 
@@ -158,7 +167,8 @@
 			<if test="chapuName != null">`chapu_name` = #{chapuName}, </if>
 			<if test="informFlag != null">`inform_flag` = #{informFlag}, </if>
 			<if test="teaSortId != null">`tea_sort_id` = #{teaSortId}, </if>
-			<if test="teaSortName != null">`tea_sort_name` = #{teaSortName}</if>
+			<if test="teaSortName != null">`tea_sort_name` = #{teaSortName}, </if>
+			<if test="reservNo != null">`reserv_no` = #{reservNo}</if>
 		</set>
 		where id = #{id}
 	</update>

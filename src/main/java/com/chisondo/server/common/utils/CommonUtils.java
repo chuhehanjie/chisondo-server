@@ -15,4 +15,24 @@ public final class CommonUtils {
         }
         return resultMap;
     }
+
+    public static String getCompanyNameById(Integer id) {
+        // TODO 先写死，后续配成字典
+        if (id == 1) {
+            return "湘丰集团";
+        } else if (id == 2) {
+            return "静硒园";
+        }
+        return "泉笙道";
+    }
+
+    /**
+     * 判断是否为老设备
+     * @param deviceId
+     * @return
+     */
+    public static boolean isOldDevice(String deviceId) {
+        // TODO 具体判断规则待定
+        return false;
+    }
 }

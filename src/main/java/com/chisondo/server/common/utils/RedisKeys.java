@@ -10,6 +10,6 @@ package com.chisondo.server.common.utils;
 public class RedisKeys {
 
     public static String getSysConfigKey(String key){
-        return "devctrl:config:" + key;
+        return "device:config:" + key;
     }
 }

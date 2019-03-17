@@ -1,7 +1,7 @@
 package com.chisondo.server.common.utils;
 
 import com.chisondo.server.common.exception.CommonException;
-import com.chisondo.server.modules.devctrl.entity.SysUserEntity;
+import com.chisondo.server.modules.device.entity.SysUserEntity;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;

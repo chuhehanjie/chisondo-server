@@ -1,6 +1,6 @@
 package com.chisondo.server.common.core;
 
-import com.chisondo.server.modules.devctrl.entity.SysUserEntity;
+import com.chisondo.server.modules.device.entity.SysUserEntity;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
