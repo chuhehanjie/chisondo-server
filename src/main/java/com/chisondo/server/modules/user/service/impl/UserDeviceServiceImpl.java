@@ -1,7 +1,7 @@
 package com.chisondo.server.modules.user.service.impl;
 
 import com.chisondo.server.common.utils.Constant;
-import com.chisondo.server.modules.device.dto.DeviceBindReqDTO;
+import com.chisondo.server.modules.device.dto.req.DeviceBindReqDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,5 +62,10 @@ public class UserDeviceServiceImpl implements UserDeviceService {
 		userDevice.setPrivateTag(Constant.DevPrivateTag.NO);
 		userDevice.setDefaultTag(Constant.DevDefaultTag.NO);
 		this.save(userDevice);
+	}
+
+	@Override
+	public void delUserDeviceByParams(Map<String, Object> params) {
+		this.userDeviceDao.delUserDeviceByParams(params);
 	}
 }

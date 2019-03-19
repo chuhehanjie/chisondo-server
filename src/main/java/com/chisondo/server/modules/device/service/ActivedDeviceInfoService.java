@@ -1,5 +1,6 @@
 package com.chisondo.server.modules.device.service;
 
+import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.modules.device.entity.ActivedDeviceInfoEntity;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface ActivedDeviceInfoService {
 	void delete(Integer deviceId);
 	
 	void deleteBatch(Integer[] deviceIds);
+
+	CommonResp queryDevSettingInfo(String deviceId);
 }

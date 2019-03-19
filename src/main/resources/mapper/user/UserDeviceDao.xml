@@ -116,6 +116,10 @@
 	<delete id="delete">
 		delete from tb_user_device where id = #{value}
 	</delete>
+
+	<delete id="delUserDeviceByParams">
+		delete from tb_user_device where teaman_id = #{teamanId} and device_id = #{deviceId}
+	</delete>
 	
 	<delete id="deleteBatch">
 		delete from tb_user_device where id in 

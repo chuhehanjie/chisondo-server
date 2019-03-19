@@ -4,10 +4,8 @@ import java.util.Date;
 import com.chisondo.server.common.exception.CommonException;
 import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.common.utils.*;
-import com.chisondo.server.modules.device.dto.DeviceBindReqDTO;
-import com.chisondo.server.modules.device.dto.DeviceBindRespDTO;
-import com.chisondo.server.modules.device.dto.MakeTeaByTeaSpectrumReqDTO;
-import com.chisondo.server.modules.device.dto.StartOrReserveTeaReqDTO;
+import com.chisondo.server.modules.device.dto.req.*;
+import com.chisondo.server.modules.device.dto.resp.DeviceBindRespDTO;
 import com.chisondo.server.modules.device.entity.ActivedDeviceInfoEntity;
 import com.chisondo.server.modules.device.service.DeviceCtrlService;
 import com.chisondo.server.modules.device.service.DeviceStateInfoService;
@@ -23,8 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.util.ObjectUtils;
 
 
 /**
@@ -195,5 +192,60 @@ public class DeviceCtrlServiceImpl implements DeviceCtrlService {
 	@Override
 	public void makeTeaByTeaSpectrum(MakeTeaByTeaSpectrumReqDTO makeTeaReq) {
 		log.info("makeTeaByTeaSpectrum ok");
+	}
+
+	@Override
+	public CommonResp washTea(WashTeaReqDTO washTeaReq) {
+		// TODO 直接调用接口服务
+		log.info("washTea ok");
+		return CommonResp.ok();
+	}
+
+	@Override
+	public CommonResp boilWater(BoilWaterReqDTO boilWaterReq) {
+		// TODO 直接调用接口服务
+		log.info("boilWater ok");
+		return CommonResp.ok();
+	}
+
+	@Override
+	public CommonResp stopWorking(StopWorkReqDTO stopWorkReq) {
+		// TODO 直接调用接口服务
+		/*老设备调用老流程中接口服务程序，如果是停止沏茶、烧水操作，调用接口4.3.3；停止洗茶调用接口4.3.2；取消使用茶谱沏茶调用接口4.3.5；在调用老接口前先调用4.3.7连接沏茶器接口，获取sessionid，调用完控制接口后再调用4.3.8断开和沏茶器连接；
+⑥、新设备更新4.5.3用户泡茶表*/
+		log.info("stopWorking ok");
+		return CommonResp.ok();
+	}
+
+	@Override
+	public CommonResp cancelTeaSpectrum(String devieId) {
+		//取消使用茶谱沏茶调用接口服务4.1.2.6；
+		log.info("cancelTeaSpectrum ok");
+		return CommonResp.ok();
+	}
+
+	@Override
+	public CommonResp keepWarmCtrl(DevCommonReqDTO devCommonReq) {
+		/*终端控制指令包括：保温控制；
+		②、保温控制调用接口服务4.1.2.7；
+		③、根据设备ID判断新老设备，具体判断规则待定；
+		④、新设备调用设备控制服务接口4.2.2.4；
+		⑤、老设备调用老流程中接口服务程序，保温控制调用接口4.3.6；在调用老接口前先调用4.3.7连接沏茶器接口，获取sessionid，调用完控制接口后再调用4.3.8断开和沏茶器连接；
+*/
+		log.info("cancelTeaSpectrum ok");
+		return CommonResp.ok();
+	}
+
+	@Override
+	public void delDevConnectRecord(DevCommonReqDTO devCommonReq) {
+		UserVipEntity user = this.userVipService.getUserByMobile(devCommonReq.getPhoneNum());
+		if (ObjectUtils.isEmpty(user)) {
+			throw new CommonException("用户不存在");
+		}
+		ActivedDeviceInfoEntity devInfo = this.deviceInfoService.queryObject(Integer.valueOf(devCommonReq.getDeviceId()));
+		if (ObjectUtils.isEmpty(devInfo)) {
+			throw new CommonException("设备不存在");
+		}
+		this.userDeviceService.delUserDeviceByParams(ImmutableMap.of(Keys.TEAMAN_ID, user.getMemberId(), Keys.DEVICE_ID, devInfo.getDeviceId()));
 	}
 }

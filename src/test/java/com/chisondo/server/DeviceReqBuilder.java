@@ -2,9 +2,9 @@ package com.chisondo.server;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chisondo.server.common.http.CommonReq;
-import com.chisondo.server.modules.device.dto.DeviceBindReqDTO;
-import com.chisondo.server.modules.device.dto.MakeTeaByTeaSpectrumReqDTO;
-import com.chisondo.server.modules.device.dto.StartOrReserveTeaReqDTO;
+import com.chisondo.server.modules.device.dto.req.DeviceBindReqDTO;
+import com.chisondo.server.modules.device.dto.req.MakeTeaByTeaSpectrumReqDTO;
+import com.chisondo.server.modules.device.dto.req.StartOrReserveTeaReqDTO;
 
 public class DeviceReqBuilder {
 

@@ -10,4 +10,5 @@ public class Keys {
     public static final String CONNECT_STATE = "connectState";
 
     public static final String PRIVATE_TAG = "privateTag";
+    public static final String TEAMAN_ID = "teamanId";
 }

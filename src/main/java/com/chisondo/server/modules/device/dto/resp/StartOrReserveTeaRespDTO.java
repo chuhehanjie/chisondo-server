@@ -1,4 +1,4 @@
-package com.chisondo.server.modules.device.dto;
+package com.chisondo.server.modules.device.dto.resp;
 
 import java.io.Serializable;
 

@@ -2,7 +2,7 @@ package com.chisondo.server.modules.device.service.impl;
 import java.util.Date;
 
 import com.chisondo.server.common.utils.ValidateUtils;
-import com.chisondo.server.modules.device.dto.DeviceBindReqDTO;
+import com.chisondo.server.modules.device.dto.req.DeviceBindReqDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
