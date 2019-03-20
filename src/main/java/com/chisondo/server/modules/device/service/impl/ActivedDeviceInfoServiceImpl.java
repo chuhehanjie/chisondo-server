@@ -1,7 +1,9 @@
 package com.chisondo.server.modules.device.service.impl;
 
 import com.chisondo.server.common.http.CommonResp;
+import com.chisondo.server.modules.device.dto.resp.DevQueryRespDTO;
 import com.chisondo.server.modules.device.dto.resp.DevSettingInfoResp;
+import com.chisondo.server.modules.device.dto.resp.DeviceInfoRespDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,5 +102,12 @@ public class ActivedDeviceInfoServiceImpl implements ActivedDeviceInfoService {
 */
 		DevSettingInfoResp devSettingResp = new DevSettingInfoResp();
 		return CommonResp.ok(devSettingResp);
+	}
+
+	@Override
+	public CommonResp queryHisConnectDevOfUser(String userMobile) {
+		List<DeviceInfoRespDTO> devInfoList = this.activedDeviceInfoDao.queryHisConnectDevOfUserByPhone(userMobile);
+		DevQueryRespDTO devQueryResp = new DevQueryRespDTO(devInfoList);
+		return CommonResp.ok(devQueryResp);
 	}
 }

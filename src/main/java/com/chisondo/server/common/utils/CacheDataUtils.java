@@ -1,35 +1,31 @@
 package com.chisondo.server.common.utils;
 
+import com.chisondo.server.modules.sys.entity.CompanyEntity;
+import com.chisondo.server.modules.sys.service.CompanyService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Collections;
+import java.util.List;
 
+@Slf4j
 @Component("cacheDataUtils")
 public class CacheDataUtils {
 
+    @Autowired
+    private CompanyService companyService;
+
+    private static List<CompanyEntity> companyList;
 
     @PostConstruct
     public void init() {
-       /* this.dataDictList = this.sysDataDictService.queryList(Collections.EMPTY_MAP);
-        System.out.println("dataDictList size = " + dataDictList.size());
-        this.configList = this.sysConfigService.queryAll();
-        System.out.println("configList size = " + configList.size());*/
+        companyList = this.companyService.queryList(Collections.EMPTY_MAP);
+        log.info("init query companyList size = {} ", companyList.size());
     }
 
-
-    /*public List<SysDataDictEntity> getDataDictList() {
-        return this.dataDictList;
+    public static List<CompanyEntity> getCompanyList() {
+       return companyList;
     }
-
-    public List<SysConfigEntity> getConfigList() {
-        return configList;
-    }
-
-    public String getConfigValueByKey(String key) {
-        if (ValidateUtils.isNotEmptyCollection(this.configList)) {
-            SysConfigEntity config = this.configList.stream().filter(item -> ValidateUtils.equals(key, item.getKey())).findFirst().orElse(null);
-            return ValidateUtils.isNotEmpty(config) ? config.getValue() : null;
-        }
-        return null;
-    }*/
 }

@@ -1,8 +1,11 @@
 package com.chisondo.server.modules.device.dao;
 
+import com.chisondo.server.modules.device.dto.resp.DeviceInfoRespDTO;
 import com.chisondo.server.modules.device.entity.ActivedDeviceInfoEntity;
 import com.chisondo.server.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * 
@@ -13,5 +16,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ActivedDeviceInfoDao extends BaseDao<ActivedDeviceInfoEntity> {
-	
+
+    List<DeviceInfoRespDTO> queryHisConnectDevOfUserByPhone(String userMobile);
 }

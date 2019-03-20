@@ -80,4 +80,18 @@ public class DeviceQueryController extends AbstractController {
 		// TODO 直接从 redis 查询设备状态
 		return this.deviceInfoService.queryDevSettingInfo(deviceId);
 	}
+
+	/**
+	 * 查询用户历史连接设备
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping("/api/rest/getDeviceConnectedBefore")
+	public CommonResp queryHisConnectDevOfUser(@RequestBody CommonReq req) {
+		JSONObject jsonObj = JSONObject.parseObject(req.getBizBody());
+		if (ValidateUtils.isEmpty(jsonObj) || ValidateUtils.isEmptyString(jsonObj.getString(Keys.PHONE_NUM))) {
+			throw new CommonException("手机号为空");
+		}
+		return this.deviceInfoService.queryHisConnectDevOfUser(jsonObj.getString(Keys.PHONE_NUM));
+	}
 }

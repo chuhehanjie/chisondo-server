@@ -30,4 +30,6 @@ public interface ActivedDeviceInfoService {
 	void deleteBatch(Integer[] deviceIds);
 
 	CommonResp queryDevSettingInfo(String deviceId);
+
+    CommonResp queryHisConnectDevOfUser(String userMobile);
 }
