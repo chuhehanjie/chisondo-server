@@ -16,7 +16,7 @@ public class DeviceReqBuilder {
 
     public static CommonReq getMakeTeaByTeaSpectrumReq() {
         CommonReq req = new CommonReq();
-        req.setAcckey(71823);
+        req.setAcckey("71823");
         req.setReqsrc(0);
         req.setTimestamp(System.currentTimeMillis() + "");
         MakeTeaByTeaSpectrumReqDTO makeTeaReq = new MakeTeaByTeaSpectrumReqDTO();
@@ -31,7 +31,7 @@ public class DeviceReqBuilder {
 
     public static CommonReq getStartOrReserveTeaReq() {
         CommonReq req = new CommonReq();
-        req.setAcckey(7788520);
+        req.setAcckey("7788520");
         req.setReqsrc(0);
         req.setTimestamp(System.currentTimeMillis() + "");
         StartOrReserveTeaReqDTO teaReqDTO = new StartOrReserveTeaReqDTO();
@@ -49,7 +49,7 @@ public class DeviceReqBuilder {
     }
     public static CommonReq getDevBindReq() {
         CommonReq req = new CommonReq();
-        req.setAcckey(123456);
+        req.setAcckey("123456");
         req.setReqsrc(0);
         req.setTimestamp(System.currentTimeMillis() + "");
         DeviceBindReqDTO devBindReq = new DeviceBindReqDTO();

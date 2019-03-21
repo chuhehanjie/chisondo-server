@@ -32,4 +32,6 @@ public interface ActivedDeviceInfoService {
 	CommonResp queryDevSettingInfo(String deviceId);
 
     CommonResp queryHisConnectDevOfUser(String userMobile);
+
+    ActivedDeviceInfoEntity getDeviceInfoById(String deviceId);
 }

@@ -1,7 +1,9 @@
 package com.chisondo.server.common.utils;
 
 import com.chisondo.server.modules.sys.entity.CompanyEntity;
+import com.chisondo.server.modules.sys.entity.SysConfigEntity;
 import com.chisondo.server.modules.sys.service.CompanyService;
+import com.chisondo.server.modules.sys.service.SysConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,15 +19,34 @@ public class CacheDataUtils {
     @Autowired
     private CompanyService companyService;
 
+    @Autowired
+    private SysConfigService sysConfigService;
+
     private static List<CompanyEntity> companyList;
+
+    private static List<SysConfigEntity> configList;
 
     @PostConstruct
     public void init() {
         companyList = this.companyService.queryList(Collections.EMPTY_MAP);
         log.info("init query companyList size = {} ", companyList.size());
+        configList = this.sysConfigService.queryAll();
+        log.info("init query configList size = {} ", configList.size());
     }
 
     public static List<CompanyEntity> getCompanyList() {
        return companyList;
+    }
+
+    public static List<SysConfigEntity> getConfigList() {
+        return configList;
+    }
+
+    public static String getConfigValueByKey(String key) {
+        if (ValidateUtils.isNotEmptyCollection(configList)) {
+            SysConfigEntity config = configList.stream().filter(item -> ValidateUtils.equals(key, item.getKey())).findFirst().orElse(null);
+            return ValidateUtils.isNotEmpty(config) ? config.getValue() : "";
+        }
+        return "";
     }
 }

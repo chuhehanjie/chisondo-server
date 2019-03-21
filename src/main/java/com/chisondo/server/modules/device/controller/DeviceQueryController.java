@@ -1,6 +1,7 @@
 package com.chisondo.server.modules.device.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chisondo.server.common.annotation.ParamValidator;
 import com.chisondo.server.common.core.AbstractController;
 import com.chisondo.server.common.exception.CommonException;
 import com.chisondo.server.common.http.CommonReq;
@@ -8,9 +9,10 @@ import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.common.utils.Keys;
 import com.chisondo.server.common.utils.ValidateUtils;
 import com.chisondo.server.modules.device.entity.DeviceStateInfoEntity;
-import com.chisondo.server.modules.device.entity.StartTeaEntity;
 import com.chisondo.server.modules.device.service.ActivedDeviceInfoService;
+import com.chisondo.server.modules.device.service.DeviceQueryService;
 import com.chisondo.server.modules.device.service.DeviceStateInfoService;
+import com.chisondo.server.modules.device.validator.DevExistenceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,10 +33,14 @@ public class DeviceQueryController extends AbstractController {
 	@Autowired
 	private ActivedDeviceInfoService deviceInfoService;
 
+	@Autowired
+	private DeviceQueryService deviceQueryService;
+
 	/**
 	 * 查询设备实时状态
 	 */
 	@RequestMapping("/api/rest/qryDevStatus")
+	@ParamValidator({DevExistenceValidator.class})
 	public CommonResp queryDeviceStatus(@RequestBody CommonReq req) {
 		JSONObject jsonObj = JSONObject.parseObject(req.getBizBody());
 		if (ValidateUtils.isEmpty(jsonObj) || ValidateUtils.isEmptyString(jsonObj.getString(Keys.DEVICE_ID))) {
@@ -93,5 +99,25 @@ public class DeviceQueryController extends AbstractController {
 			throw new CommonException("手机号为空");
 		}
 		return this.deviceInfoService.queryHisConnectDevOfUser(jsonObj.getString(Keys.PHONE_NUM));
+	}
+
+	/**
+	 * 查询设备的沏茶记录
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping("/api/rest/qryDeviceTeaRecord")
+	@ParamValidator({DevExistenceValidator.class})
+	public CommonResp queryMakeTeaRecordsOfDev(@RequestBody CommonReq req) {
+		/*输入参数	是否必填	参数类型	说明	备注
+		phoneNum	Y	String	手机号码
+		num	N	int	每页条数
+		page	N	int	页码*/
+
+		JSONObject jsonObj = JSONObject.parseObject(req.getBizBody());
+		if (ValidateUtils.isEmpty(jsonObj) || ValidateUtils.isEmptyString(jsonObj.getString(Keys.PHONE_NUM))) {
+			throw new CommonException("手机号为空");
+		}
+		return this.deviceQueryService.queryMakeTeaRecordsOfDev(req);
 	}
 }

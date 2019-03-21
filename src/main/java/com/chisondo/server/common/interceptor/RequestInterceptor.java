@@ -1,10 +1,11 @@
 package com.chisondo.server.common.interceptor;
 
-import com.alibaba.fastjson.JSONObject;
-import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
+import com.chisondo.server.common.utils.CacheDataUtils;
 import com.chisondo.server.common.utils.CommonUtils;
+import com.chisondo.server.common.utils.Keys;
 import com.chisondo.server.common.utils.ValidateUtils;
+import com.chisondo.server.modules.sys.entity.CompanyEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -19,26 +20,63 @@ import java.lang.reflect.Method;
 @Slf4j
 @Component
 public class RequestInterceptor extends HandlerInterceptorAdapter {
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //如果不是映射到方法直接通过
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        Method method = handlerMethod.getMethod();
-        // 获取请求参数
-       /* String json = CommonUtils.getJSONFromRequest(request);
-        CommonReq commonReq = JSONObject.parseObject(json, CommonReq.class);
-        if (null == commonReq.getReqsrc() || null == commonReq.getAcckey()
-                || ValidateUtils.isEmptyString(commonReq.getTimestamp()) || ValidateUtils.isEmptyString(commonReq.getBizBody())) {
-            CommonUtils.outJSONResponse(response, CommonResp.error(HttpStatus.SC_BAD_REQUEST, "错误的请求！"));
+        // 未开启鉴权，直接放行
+        if (!this.isAuthEnable()) {
+            return true;
+        }
+        String acckey = request.getHeader(Keys.ACCKEY);
+        String reqsrc = request.getHeader(Keys.REQSRC);
+        String timestamp = request.getHeader(Keys.TIMESTAMP);
+        if (ValidateUtils.isEmptyString(acckey) || ValidateUtils.isEmptyString(reqsrc) || ValidateUtils.isEmptyString(timestamp)) {
+            CommonUtils.outJSONResponse(response, CommonResp.error(HttpStatus.SC_BAD_REQUEST, "错误的请求参数！"));
             return false;
-        }*/
-        // 通过该密钥+传入时间戳的第234位+ 请求来源生成鉴权字符串；规则如下：
-        // acckey  =  md5（reqsrc + md5（key +  timestamp(后4位)
-
+        }
+        String actualAuthKey = this.getAccKey(reqsrc);
+        if (ValidateUtils.isEmptyString(actualAuthKey)) {
+            CommonUtils.outJSONResponse(response, CommonResp.error(HttpStatus.SC_UNAUTHORIZED, "授权key不存在！"));
+            return false;
+        }
+        // 时间戳如果大于 当前时间5分钟会返回“请求超时”
+//        System.currentTimeMillis()
+        if (!this.doAuthentication(acckey, reqsrc, timestamp, actualAuthKey)) {
+            CommonUtils.outJSONResponse(response, CommonResp.error(HttpStatus.SC_UNAUTHORIZED, "鉴权失败！"));
+            return false;
+        }
         return true;
+    }
+
+    private boolean doAuthentication(String acckey, String reqsrc, String timestamp, String actualAuthKey) {
+        String timestampValue = this.parseTimestampByRule(timestamp);
+        String md5Key = DigestUtils.md5DigestAsHex((reqsrc + DigestUtils.md5DigestAsHex((actualAuthKey + timestampValue).getBytes())).getBytes());
+        return ValidateUtils.equals(acckey, md5Key);
+    }
+
+    private String parseTimestampByRule(String timestamp) {
+        String authRule = CacheDataUtils.getConfigValueByKey(Keys.AUTH_RULE);
+        String[] authRules = authRule.split("_");
+        int startPos = Integer.valueOf(authRules[0]);
+        int endPos = Integer.valueOf(authRules[1]);
+        return timestamp.substring(startPos, endPos);
+    }
+
+    private String getAccKey(String reqsrc) {
+        for (CompanyEntity company : CacheDataUtils.getCompanyList()) {
+            if (ValidateUtils.equals(company.getId() + "", reqsrc)) {
+                return company.getKey();
+            }
+        }
+        return null;
+    }
+
+    private boolean isAuthEnable() {
+        return ValidateUtils.equals("true", CacheDataUtils.getConfigValueByKey(Keys.AUTH_FLAG));
     }
 
     public static void main(String[] args) {

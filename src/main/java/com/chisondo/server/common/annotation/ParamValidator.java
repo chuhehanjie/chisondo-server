@@ -8,5 +8,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ParamValidator {
-//    BusiValidator validators();
+    Class<? extends BusiValidator> [] value();
 }

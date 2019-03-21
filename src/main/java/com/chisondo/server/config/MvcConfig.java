@@ -14,7 +14,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(this.requestInterceptor);
+        registry.addInterceptor(this.requestInterceptor);
     }
 
 }

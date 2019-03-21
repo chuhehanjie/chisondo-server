@@ -1,6 +1,9 @@
 package com.chisondo.server.common.http;
 
+import com.google.common.collect.Maps;
+
 import java.io.Serializable;
+import java.util.Map;
 
 public class CommonReq implements Serializable {
 
@@ -9,7 +12,7 @@ public class CommonReq implements Serializable {
      * 生成规则
      * 如：鉴权方式 acckey  =  md5（reqsrc + md5（key +  timestamp(后4位)）
      */
-    private Integer acckey;
+    private String acckey;
     /**
      * 请求来源
      * 0-泉笙道，1-湘丰集团，2-静硒园,345….,默认 0泉笙道
@@ -26,11 +29,13 @@ public class CommonReq implements Serializable {
      */
     private String bizBody;
 
-    public Integer getAcckey() {
+    private Map<String, Object> extAttrs = Maps.newHashMap();
+
+    public String getAcckey() {
         return acckey;
     }
 
-    public void setAcckey(Integer acckey) {
+    public void setAcckey(String acckey) {
         this.acckey = acckey;
     }
 
@@ -56,5 +61,13 @@ public class CommonReq implements Serializable {
 
     public void setBizBody(String bizBody) {
         this.bizBody = bizBody;
+    }
+
+    public void addAttr(String key, Object obj) {
+        this.extAttrs.put(key, obj);
+    }
+
+    public Object getAttrByKey(String key) {
+        return this.extAttrs.get(key);
     }
 }
