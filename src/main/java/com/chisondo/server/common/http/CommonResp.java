@@ -77,6 +77,6 @@ public class CommonResp implements Serializable {
     }
 
     public static CommonResp ok() {
-        return new CommonResp(HttpStatus.SC_OK);
+        return new CommonResp(HttpStatus.SC_OK, "success", null);
     }
 }
