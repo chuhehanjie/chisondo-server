@@ -97,6 +97,6 @@ public class DeviceQueryServiceImpl implements DeviceQueryService {
 		temperature	Y	Integer	温度
 		waterlevel	Y	Integer	出水量
 		soak	Y	Integer	沏茶时间*/
-
+		return CommonResp.ok();
 	}
 }

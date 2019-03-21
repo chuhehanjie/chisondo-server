@@ -31,7 +31,7 @@ public class SysConfigServiceImpl implements SysConfigService {
 	@Transactional
 	public void update(SysConfigEntity config) {
 		sysConfigDao.update(config);
-		sysConfigRedis.saveOrUpdate(config);
+		// sysConfigRedis.saveOrUpdate(config);
 	}
 
 	@Override

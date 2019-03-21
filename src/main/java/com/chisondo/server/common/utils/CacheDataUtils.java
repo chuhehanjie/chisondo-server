@@ -43,10 +43,15 @@ public class CacheDataUtils {
     }
 
     public static String getConfigValueByKey(String key) {
+        SysConfigEntity config = getConfigByKey(key);
+        return ValidateUtils.isNotEmpty(config) ? config.getValue() : "";
+    }
+
+    public static SysConfigEntity getConfigByKey(String key) {
         if (ValidateUtils.isNotEmptyCollection(configList)) {
             SysConfigEntity config = configList.stream().filter(item -> ValidateUtils.equals(key, item.getKey())).findFirst().orElse(null);
-            return ValidateUtils.isNotEmpty(config) ? config.getValue() : "";
+            return config;
         }
-        return "";
+        return null;
     }
 }
