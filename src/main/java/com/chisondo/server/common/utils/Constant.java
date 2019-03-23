@@ -65,4 +65,9 @@ public class Constant {
         int PANEL = 2;
     }
 
+    public interface RespResult {
+        int SUCCESS = 1;
+        int FAILED = 0;
+    }
+
 }

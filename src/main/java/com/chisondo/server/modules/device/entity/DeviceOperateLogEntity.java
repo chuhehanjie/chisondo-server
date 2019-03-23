@@ -34,6 +34,8 @@ public class DeviceOperateLogEntity  implements Serializable {
 	private Date endTime;
 	//执行结果
 	private Integer operResult;
+	//描述
+	private String desc;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -104,5 +106,13 @@ public class DeviceOperateLogEntity  implements Serializable {
 
 	public Integer getOperResult() {
 		return operResult;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 }

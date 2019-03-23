@@ -13,5 +13,10 @@ public interface DeviceQueryService {
 
     CommonResp queryHisConnectDevOfUser(String userMobile);
 
+	/**
+	 * 查询设备沏茶记录
+	 * @param req
+	 * @return
+	 */
 	CommonResp queryMakeTeaRecordsOfDev(CommonReq req);
 }

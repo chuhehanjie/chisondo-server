@@ -1,6 +1,8 @@
 package com.chisondo.server.modules.device.service.impl;
 
 import com.chisondo.server.common.http.CommonResp;
+import com.chisondo.server.modules.device.dto.req.SetDevNameReqDTO;
+import com.chisondo.server.modules.device.dto.req.SetDevPwdReqDTO;
 import com.chisondo.server.modules.device.dto.resp.DevQueryRespDTO;
 import com.chisondo.server.modules.device.dto.resp.DevSettingInfoResp;
 import com.chisondo.server.modules.device.dto.resp.DeviceInfoRespDTO;
@@ -16,44 +18,44 @@ import com.chisondo.server.modules.device.service.ActivedDeviceInfoService;
 
 
 
-@Service("activedDeviceInfoService")
+@Service("deviceInfoService")
 public class ActivedDeviceInfoServiceImpl implements ActivedDeviceInfoService {
 	@Autowired
-	private ActivedDeviceInfoDao activedDeviceInfoDao;
+	private ActivedDeviceInfoDao deviceInfoDao;
 	
 	@Override
 	public ActivedDeviceInfoEntity queryObject(Integer deviceId){
-		return activedDeviceInfoDao.queryObject(deviceId);
+		return deviceInfoDao.queryObject(deviceId);
 	}
 	
 	@Override
 	public List<ActivedDeviceInfoEntity> queryList(Map<String, Object> map){
-		return activedDeviceInfoDao.queryList(map);
+		return deviceInfoDao.queryList(map);
 	}
 	
 	@Override
 	public int queryTotal(Map<String, Object> map){
-		return activedDeviceInfoDao.queryTotal(map);
+		return deviceInfoDao.queryTotal(map);
 	}
 	
 	@Override
 	public void save(ActivedDeviceInfoEntity activedDeviceInfo){
-		activedDeviceInfoDao.save(activedDeviceInfo);
+		deviceInfoDao.save(activedDeviceInfo);
 	}
 	
 	@Override
 	public void update(ActivedDeviceInfoEntity activedDeviceInfo){
-		activedDeviceInfoDao.update(activedDeviceInfo);
+		deviceInfoDao.update(activedDeviceInfo);
 	}
 	
 	@Override
 	public void delete(Integer deviceId){
-		activedDeviceInfoDao.delete(deviceId);
+		deviceInfoDao.delete(deviceId);
 	}
 	
 	@Override
 	public void deleteBatch(Integer[] deviceIds){
-		activedDeviceInfoDao.deleteBatch(deviceIds);
+		deviceInfoDao.deleteBatch(deviceIds);
 	}
 
 	@Override
@@ -106,7 +108,7 @@ public class ActivedDeviceInfoServiceImpl implements ActivedDeviceInfoService {
 
 	@Override
 	public CommonResp queryHisConnectDevOfUser(String userMobile) {
-		List<DeviceInfoRespDTO> devInfoList = this.activedDeviceInfoDao.queryHisConnectDevOfUserByPhone(userMobile);
+		List<DeviceInfoRespDTO> devInfoList = this.deviceInfoDao.queryHisConnectDevOfUserByPhone(userMobile);
 		DevQueryRespDTO devQueryResp = new DevQueryRespDTO(devInfoList);
 		return CommonResp.ok(devQueryResp);
 	}
@@ -114,5 +116,15 @@ public class ActivedDeviceInfoServiceImpl implements ActivedDeviceInfoService {
 	@Override
 	public ActivedDeviceInfoEntity getDeviceInfoById(String deviceId) {
 		return this.queryObject(Integer.valueOf(deviceId));
+	}
+
+	@Override
+	public void updateDevPwd(SetDevPwdReqDTO setDevPwdReq) {
+		this.deviceInfoDao.updateDevPwd(setDevPwdReq);
+	}
+
+	@Override
+	public void updateDevNameOrDesc(SetDevNameReqDTO setDevNameReq) {
+		this.deviceInfoDao.updateDevNameOrDesc(setDevNameReq);
 	}
 }

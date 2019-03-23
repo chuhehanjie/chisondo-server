@@ -23,4 +23,9 @@ public class Keys {
 
     public static final String REQSRC = "reqsrc";
 
+    public static final String REQ_TIME_OUT = "REQ_TIME_OUT";
+
+    public static final String USER_INFO = "userInfo";
+
+    public static final String DEVICE_INFO = "deviceInfo";
 }

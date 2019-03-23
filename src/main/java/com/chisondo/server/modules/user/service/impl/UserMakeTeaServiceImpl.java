@@ -1,5 +1,6 @@
 package com.chisondo.server.modules.user.service.impl;
 
+import com.chisondo.server.modules.device.dto.resp.MakeTeaRowRespDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +52,9 @@ public class UserMakeTeaServiceImpl implements UserMakeTeaService {
 	public void deleteBatch(Integer[] ids){
 		userMakeTeaDao.deleteBatch(ids);
 	}
-	
+
+	@Override
+	public List<MakeTeaRowRespDTO> queryMakeTeaRecordsByDeviceId(String deviceId) {
+		return this.userMakeTeaDao.queryMakeTeaRecordsByDeviceId(deviceId);
+	}
 }

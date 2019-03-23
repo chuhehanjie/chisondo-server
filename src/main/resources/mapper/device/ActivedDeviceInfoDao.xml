@@ -234,4 +234,12 @@
 		where c.PHONE = #{userMobile}
 	</select>
 
+	<update id="updateDevPwd" parameterType="com.chisondo.server.modules.device.dto.req.SetDevPwdReqDTO">
+		UPDATE tb_actived_device_info set password = #{newPwd} where device_id = #{deviceId}
+	</update>
+
+	<update id="updateDevNameOrDesc" parameterType="com.chisondo.server.modules.device.dto.req.SetDevNameReqDTO">
+		UPDATE tb_actived_device_info set device_name = #{deviceName}, dev_desc = #{deviceDesc} where device_id = #{deviceId}
+	</update>
+
 </mapper>

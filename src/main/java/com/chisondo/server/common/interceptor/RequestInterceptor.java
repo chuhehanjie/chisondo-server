@@ -44,12 +44,32 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         // 时间戳如果大于 当前时间5分钟会返回“请求超时”
+        if (this.isReqTimeout(timestamp)) {
+            CommonUtils.outJSONResponse(response, CommonResp.error(HttpStatus.SC_REQUEST_TIMEOUT, "请求超时！"));
+            return false;
+        }
 //        System.currentTimeMillis()
         if (!this.doAuthentication(acckey, reqsrc, timestamp, actualAuthKey)) {
             CommonUtils.outJSONResponse(response, CommonResp.error(HttpStatus.SC_UNAUTHORIZED, "鉴权失败！"));
             return false;
         }
         return true;
+    }
+
+    /**
+     * 判断请求是否超时
+     * @param timestamp
+     * @return
+     */
+    private boolean isReqTimeout(String timestamp) {
+        Long timeout = Long.valueOf(CacheDataUtils.getConfigValueByKey(Keys.REQ_TIME_OUT));
+        Long reqTimestamp = Long.valueOf(timestamp);
+        Long currentTimestamp = System.currentTimeMillis();
+        if (Math.abs(reqTimestamp - currentTimestamp) > timeout) {
+            log.error("请求超时了！请求时间：{}，当前时间：{}，超时时间：{}", reqTimestamp, currentTimestamp, timeout);
+            return true;
+        }
+        return false;
     }
 
     private boolean doAuthentication(String acckey, String reqsrc, String timestamp, String actualAuthKey) {

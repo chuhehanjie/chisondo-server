@@ -1,6 +1,8 @@
 package com.chisondo.server.common.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chisondo.server.common.http.CommonReq;
+import com.chisondo.server.common.http.CommonResp;
 import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,5 +67,29 @@ public final class CommonUtils {
         } finally {
             IOUtils.closeQuietly(out);
         }
+    }
+
+    public static JSONObject convertReq2JSONObj(CommonReq req) {
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("acckey", req.getAcckey());
+        jsonObj.put("reqsrc", req.getReqsrc());
+        jsonObj.put("timestamp", req.getTimestamp());
+        jsonObj.put("bizBody", req.getBizBody());
+        return jsonObj;
+    }
+
+    public static JSONObject convertResp2JSONObj(CommonResp resp) {
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("retn", resp.getRetn());
+        jsonObj.put("desc", resp.getDesc());
+        jsonObj.put("bizBody", resp.getBizBody());
+        return jsonObj;
+    }
+
+    public static void main(String[] args) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", "chris");
+        jsonObject.put("job", "java");
+        System.out.println(jsonObject);
     }
 }

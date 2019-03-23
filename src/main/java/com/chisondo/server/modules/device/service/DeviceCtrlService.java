@@ -1,5 +1,6 @@
 package com.chisondo.server.modules.device.service;
 
+import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.modules.device.dto.req.*;
 import com.chisondo.server.modules.device.dto.resp.DeviceBindRespDTO;
@@ -22,7 +23,7 @@ public interface DeviceCtrlService {
 	CommonResp startOrReserveTea(StartOrReserveTeaReqDTO startOrReserveTeaReq);
 
 	@Transactional
-	DeviceBindRespDTO bindDevice(DeviceBindReqDTO devBindReq);
+	DeviceBindRespDTO bindDevice(CommonReq devBindReq);
 
 	@Transactional
     void makeTeaByTeaSpectrum(MakeTeaByTeaSpectrumReqDTO makeTeaReq);
@@ -48,5 +49,11 @@ public interface DeviceCtrlService {
 	CommonResp keepWarmCtrl(DevCommonReqDTO keepWarmCtrlReq);
 
 	@Transactional
-	void delDevConnectRecord(DevCommonReqDTO devCommonReq);
+	void delDevConnectRecord(CommonReq devCommonReq);
+
+	@Transactional
+    CommonResp setDevicePassword(CommonReq req);
+
+	@Transactional
+    CommonResp setDeviceNameOrDesc(CommonReq req);
 }

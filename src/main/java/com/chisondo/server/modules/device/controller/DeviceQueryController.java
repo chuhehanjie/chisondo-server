@@ -113,11 +113,6 @@ public class DeviceQueryController extends AbstractController {
 		phoneNum	Y	String	手机号码
 		num	N	int	每页条数
 		page	N	int	页码*/
-
-		JSONObject jsonObj = JSONObject.parseObject(req.getBizBody());
-		if (ValidateUtils.isEmpty(jsonObj) || ValidateUtils.isEmptyString(jsonObj.getString(Keys.PHONE_NUM))) {
-			throw new CommonException("手机号为空");
-		}
 		return this.deviceQueryService.queryMakeTeaRecordsOfDev(req);
 	}
 }

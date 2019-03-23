@@ -4,16 +4,24 @@ import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.common.utils.Keys;
 import com.chisondo.server.modules.device.dto.resp.DevSettingInfoResp;
+import com.chisondo.server.modules.device.dto.resp.MakeTeaRespDTO;
+import com.chisondo.server.modules.device.dto.resp.MakeTeaRowRespDTO;
 import com.chisondo.server.modules.device.service.ActivedDeviceInfoService;
 import com.chisondo.server.modules.device.service.DeviceQueryService;
+import com.chisondo.server.modules.user.service.UserMakeTeaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service("deviceQueryService")
 public class DeviceQueryServiceImpl implements DeviceQueryService {
 	@Autowired
 	private ActivedDeviceInfoService deviceInfoService;
+
+	@Autowired
+	private UserMakeTeaService userMakeTeaService;
 	
 	@Override
 	public CommonResp queryDevSettingInfo(String deviceId) {
@@ -74,29 +82,9 @@ public class DeviceQueryServiceImpl implements DeviceQueryService {
 	@Override
 	public CommonResp queryMakeTeaRecordsOfDev(CommonReq req) {
 		String deviceId = (String) req.getAttrByKey(Keys.DEVICE_ID);
-		/*retn	Y	Integer	返回码
-		desc	Y	String	返回描述
-		count	Y	Integer	记录条数
-		rows	N	Array	泡茶信息
-		makeId	Y	Integer	记录编号
-		phoneNum	Y	String	用户手机号码
-		userName	N	String	用户昵称	可为空可为微信昵称
-		userImg	N	String	用户图像	可为空可为微信图像
-		startTime	Y	String	启动时间
-		endTime	Y	String	结束时间
-		makeType	Y	Integer	沏茶类型	0-普通沏茶；1-茶谱沏茶；2-洗茶；3-烧水
-		makeMode	Y	Integer	沏茶方式	0-手机终端操作；1-设备面板操作
-		下面这一部分字段，只有在使用茶谱沏茶时才有返回
-		chapuId	Y	int	茶谱ID
-		chapuName	Y	String	茶谱名称
-		chapuIndex	Y	Integer	执行的是第几泡
-		chapuImage	N	String	茶谱图像	可为空
-		下面这一部分字段，只有在非茶谱沏茶时才返回
-		teaSortId	N	Integer	茶类ID
-		teaSortName	N	String	茶类名称
-		temperature	Y	Integer	温度
-		waterlevel	Y	Integer	出水量
-		soak	Y	Integer	沏茶时间*/
-		return CommonResp.ok();
+		// TODO 还需要根据分页参数来查
+		List<MakeTeaRowRespDTO> rows = this.userMakeTeaService.queryMakeTeaRecordsByDeviceId(deviceId);
+		MakeTeaRespDTO makeTeaResp = new MakeTeaRespDTO(rows);
+		return CommonResp.ok(makeTeaResp);
 	}
 }

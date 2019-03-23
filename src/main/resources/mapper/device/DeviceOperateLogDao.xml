@@ -15,6 +15,7 @@
         <result property="startTime" column="start_time"/>
         <result property="endTime" column="end_time"/>
         <result property="operResult" column="oper_result"/>
+        <result property="desc" column="desc"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.chisondo.server.modules.device.entity.DeviceOperateLogEntity">
@@ -111,7 +112,8 @@
 			`res_content`, 
 			`start_time`, 
 			`end_time`, 
-			`oper_result`
+			`oper_result`,
+			`desc`
 		)
 		values
 		(
@@ -123,7 +125,8 @@
 			#{resContent}, 
 			#{startTime}, 
 			#{endTime}, 
-			#{operResult}
+			#{operResult},
+			#{desc}
 		)
 	</insert>
 	 
@@ -138,7 +141,8 @@
 			<if test="resContent != null">`res_content` = #{resContent}, </if>
 			<if test="startTime != null">`start_time` = #{startTime}, </if>
 			<if test="endTime != null">`end_time` = #{endTime}, </if>
-			<if test="operResult != null">`oper_result` = #{operResult}</if>
+			<if test="operResult != null">`oper_result` = #{operResult},</if>
+			<if test="desc != null">`desc` = #{desc}</if>
 		</set>
 		where id = #{id}
 	</update>

@@ -1,12 +1,15 @@
 package com.chisondo.server.modules.device.service.impl;
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
 import com.chisondo.server.common.exception.CommonException;
+import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.common.utils.*;
 import com.chisondo.server.modules.device.dto.req.*;
 import com.chisondo.server.modules.device.dto.resp.DeviceBindRespDTO;
 import com.chisondo.server.modules.device.entity.ActivedDeviceInfoEntity;
+import com.chisondo.server.modules.device.service.ActivedDeviceInfoService;
 import com.chisondo.server.modules.device.service.DeviceCtrlService;
 import com.chisondo.server.modules.device.service.DeviceStateInfoService;
 import com.chisondo.server.modules.user.entity.UserBookEntity;
@@ -31,14 +34,14 @@ import org.springframework.util.ObjectUtils;
  * @date Mar 12.19
  */
 @Slf4j
-@Service("sysUserService")
+@Service("deviceCtrlService")
 public class DeviceCtrlServiceImpl implements DeviceCtrlService {
 
 	@Autowired
 	private UserVipService userVipService;
 
 	@Autowired
-	private ActivedDeviceInfoServiceImpl deviceInfoService;
+	private ActivedDeviceInfoService deviceInfoService;
 
 	@Autowired
 	private UserDeviceService userDeviceService;
@@ -114,28 +117,9 @@ public class DeviceCtrlServiceImpl implements DeviceCtrlService {
 	}
 
 	@Override
-	public DeviceBindRespDTO bindDevice(DeviceBindReqDTO devBindReq) {
-		// 校验设备是否存在
-		ActivedDeviceInfoEntity deviceInfo = this.deviceInfoService.queryObject(Integer.valueOf(devBindReq.getDeviceId()));
-		if (ValidateUtils.isEmpty(deviceInfo)) {
-			throw new CommonException("设备不存在");
-		}
-
-		if (ValidateUtils.notEquals(deviceInfo.getPassword(), devBindReq.getPasswd())) {
-			throw new CommonException("设备密码错误");
-		}
-		// 校验设备是否已经被占用(即状态为连接中)
-		if (this.isDeviceConnected(devBindReq.getDeviceId())) {
-			throw new CommonException("设备在连接中");
-		}
-
-		// 校验设备是否有其他用户关联，且只允许关联一个用户 privateTag = 1
-		if (this.isDeviceNotAllowConnect(devBindReq.getDeviceId())) {
-			throw new CommonException("设备已被占用");
-		}
-
-		// 校验
-
+	public DeviceBindRespDTO bindDevice(CommonReq req) {
+		DeviceBindReqDTO devBindReq = (DeviceBindReqDTO) req.getAttrByKey("devBindReq");
+		ActivedDeviceInfoEntity deviceInfo = (ActivedDeviceInfoEntity) req.getAttrByKey("devBindReq");
 		Long userId = this.getUserId(devBindReq);
 
 		// 保存用户与设备之间的关系
@@ -172,21 +156,6 @@ public class DeviceCtrlServiceImpl implements DeviceCtrlService {
 			userId = user.getMemberId();
 		}
 		return userId;
-	}
-
-	private boolean isDeviceNotAllowConnect(String deviceId) {
-		if (ValidateUtils.isNotEmptyCollection(this.userDeviceService.queryList(ImmutableMap.of(Keys.DEVICE_ID, deviceId,Keys.PRIVATE_TAG, Constant.DevPrivateTag.YES)))) {
-			return true;
-		}
-		return false;
-	}
-
-	private boolean isDeviceConnected(String deviceId) {
-		if (ValidateUtils.isNotEmptyCollection(this.deviceStateInfoService.queryList(
-				ImmutableMap.of(Keys.DEVICE_ID, deviceId, Keys.CONNECT_STATE, Constant.ConnectState.CONNECTED)))) {
-			return true;
-		}
-		return false;
 	}
 
 	@Override
@@ -237,15 +206,23 @@ public class DeviceCtrlServiceImpl implements DeviceCtrlService {
 	}
 
 	@Override
-	public void delDevConnectRecord(DevCommonReqDTO devCommonReq) {
-		UserVipEntity user = this.userVipService.getUserByMobile(devCommonReq.getPhoneNum());
-		if (ObjectUtils.isEmpty(user)) {
-			throw new CommonException("用户不存在");
-		}
-		ActivedDeviceInfoEntity devInfo = this.deviceInfoService.queryObject(Integer.valueOf(devCommonReq.getDeviceId()));
-		if (ObjectUtils.isEmpty(devInfo)) {
-			throw new CommonException("设备不存在");
-		}
+	public void delDevConnectRecord(CommonReq req) {
+		UserVipEntity user = (UserVipEntity) req.getAttrByKey(Keys.USER_INFO);
+		ActivedDeviceInfoEntity devInfo = (ActivedDeviceInfoEntity) req.getAttrByKey(Keys.DEVICE_INFO);
 		this.userDeviceService.delUserDeviceByParams(ImmutableMap.of(Keys.TEAMAN_ID, user.getMemberId(), Keys.DEVICE_ID, devInfo.getDeviceId()));
+	}
+
+	@Override
+	public CommonResp setDevicePassword(CommonReq req) {
+		SetDevPwdReqDTO setDevPwdReq = (SetDevPwdReqDTO) req.getAttrByKey("setDevPwdReq");
+		this.deviceInfoService.updateDevPwd(setDevPwdReq);
+		return CommonResp.ok();
+	}
+
+	@Override
+	public CommonResp setDeviceNameOrDesc(CommonReq req) {
+		SetDevNameReqDTO setDevNameReq = (SetDevNameReqDTO) req.getAttrByKey("setDevNameReq");
+		this.deviceInfoService.updateDevNameOrDesc(setDevNameReq);
+		return CommonResp.ok();
 	}
 }

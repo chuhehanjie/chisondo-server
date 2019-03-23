@@ -4,35 +4,36 @@ import com.alibaba.fastjson.JSONObject;
 import com.chisondo.server.common.exception.CommonException;
 import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.utils.Keys;
-import com.chisondo.server.common.utils.SpringContextUtils;
 import com.chisondo.server.common.utils.ValidateUtils;
 import com.chisondo.server.common.validator.BusiValidator;
 import com.chisondo.server.modules.device.entity.ActivedDeviceInfoEntity;
 import com.chisondo.server.modules.device.service.ActivedDeviceInfoService;
+import com.chisondo.server.modules.user.entity.UserVipEntity;
+import com.chisondo.server.modules.user.service.UserVipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 /**
- * 校验设备是否存在
+ * 校验用户是否存在
  */
-@Component("devExistenceValidator")
-public class DevExistenceValidator implements BusiValidator {
+@Component("userExistenceValidator")
+public class UserExistenceValidator implements BusiValidator {
 
     @Autowired
-    private ActivedDeviceInfoService deviceInfoService;
+    private UserVipService userVipService;
 
     @Override
     public void validate(CommonReq req) {
         JSONObject jsonObj = JSONObject.parseObject(req.getBizBody());
-        String deviceId = jsonObj.getString("deviceId");
-        if (ValidateUtils.isEmptyString(deviceId)) {
-            throw new CommonException("设备ID为空");
+        String phoneNum = jsonObj.getString(Keys.PHONE_NUM);
+        if (ValidateUtils.isEmptyString(phoneNum)) {
+            throw new CommonException("用户号码为空");
         }
-        ActivedDeviceInfoEntity deviceInfo = this.deviceInfoService.getDeviceInfoById(deviceId);
-        if (ValidateUtils.isEmpty(deviceInfo)) {
-            throw new CommonException("设备信息不存在");
+        UserVipEntity user = this.userVipService.getUserByMobile(phoneNum);
+        if (ValidateUtils.isEmpty(user)) {
+            throw new CommonException("用户不存在");
         }
-        req.addAttr("deviceInfo", deviceInfo);
-        req.addAttr(Keys.DEVICE_ID, deviceId);
+        req.addAttr(Keys.USER_INFO, user);
     }
 }

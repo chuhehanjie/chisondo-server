@@ -244,4 +244,30 @@
 		</foreach>
 	</delete>
 
+	<select id="queryMakeTeaRecordsByDeviceId" parameterType="java.lang.String" resultType="com.chisondo.server.modules.device.dto.resp.MakeTeaRowRespDTO">
+		SELECT
+			umt.id as makeId,
+			dv.PHONE as phoneNum,
+			dv.VIP_NAME as userName,
+			dv.VIP_HEAD_IMG as userImg,
+			umt.add_time as startTime,
+			umt.last_time as endTime,
+			umt.make_type as makeType,
+			0 as makeMode,
+			umt.chapu_id as chapuId,
+			c.name as chapuName,
+			umt.make_index as chapuIndex,
+			c.image as chapuImage,
+			umt.tea_sort_id as teaSortId,
+			umt.tea_sort_name as teaSortName,
+			umt.temperature as temperature,
+			150 as waterlevel,
+			umt.soak as soak
+		FROM tb_user_make_tea umt
+		INNER JOIN t_data_vip dv ON dv.member_id = umt.teaman_id
+		LEFT JOIN v_app_chapu c ON c.chapu_id = umt.chapu_id
+		where umt.device_id = #{deviceId}
+		order by umt.add_time desc
+	</select>
+
 </mapper>

@@ -1,5 +1,6 @@
 package com.chisondo.server.modules.user.service;
 
+import com.chisondo.server.modules.device.dto.resp.MakeTeaRowRespDTO;
 import com.chisondo.server.modules.user.entity.UserMakeTeaEntity;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface UserMakeTeaService {
 	void delete(Integer id);
 	
 	void deleteBatch(Integer[] ids);
+
+    List<MakeTeaRowRespDTO> queryMakeTeaRecordsByDeviceId(String deviceId);
 }

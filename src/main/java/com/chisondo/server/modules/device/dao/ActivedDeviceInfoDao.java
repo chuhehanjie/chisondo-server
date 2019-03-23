@@ -1,5 +1,7 @@
 package com.chisondo.server.modules.device.dao;
 
+import com.chisondo.server.modules.device.dto.req.SetDevNameReqDTO;
+import com.chisondo.server.modules.device.dto.req.SetDevPwdReqDTO;
 import com.chisondo.server.modules.device.dto.resp.DeviceInfoRespDTO;
 import com.chisondo.server.modules.device.entity.ActivedDeviceInfoEntity;
 import com.chisondo.server.modules.sys.dao.BaseDao;
@@ -18,4 +20,8 @@ import java.util.List;
 public interface ActivedDeviceInfoDao extends BaseDao<ActivedDeviceInfoEntity> {
 
     List<DeviceInfoRespDTO> queryHisConnectDevOfUserByPhone(String userMobile);
+
+    void updateDevPwd(SetDevPwdReqDTO setDevPwdReq);
+
+    void updateDevNameOrDesc(SetDevNameReqDTO setDevNameReq);
 }
