@@ -56,4 +56,10 @@ public interface DeviceCtrlService {
 
 	@Transactional
     CommonResp setDeviceNameOrDesc(CommonReq req);
+
+	@Transactional
+    CommonResp setDeviceSound(CommonReq req);
+
+	@Transactional
+	CommonResp setDefaultDevice(CommonReq req);
 }

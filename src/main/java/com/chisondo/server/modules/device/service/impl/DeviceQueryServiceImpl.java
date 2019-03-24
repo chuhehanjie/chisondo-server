@@ -1,18 +1,24 @@
 package com.chisondo.server.modules.device.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
+import com.chisondo.server.common.utils.CommonUtils;
 import com.chisondo.server.common.utils.Keys;
+import com.chisondo.server.common.utils.Query;
+import com.chisondo.server.common.utils.ValidateUtils;
 import com.chisondo.server.modules.device.dto.resp.DevSettingInfoResp;
 import com.chisondo.server.modules.device.dto.resp.MakeTeaRespDTO;
 import com.chisondo.server.modules.device.dto.resp.MakeTeaRowRespDTO;
 import com.chisondo.server.modules.device.service.ActivedDeviceInfoService;
 import com.chisondo.server.modules.device.service.DeviceQueryService;
 import com.chisondo.server.modules.user.service.UserMakeTeaService;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Service("deviceQueryService")
@@ -82,9 +88,13 @@ public class DeviceQueryServiceImpl implements DeviceQueryService {
 	@Override
 	public CommonResp queryMakeTeaRecordsOfDev(CommonReq req) {
 		String deviceId = (String) req.getAttrByKey(Keys.DEVICE_ID);
+		JSONObject jsonObj = JSONObject.parseObject(req.getBizBody());
+		Map<String, Object> params = CommonUtils.getPageParams(jsonObj);
+		params.put(Keys.DEVICE_ID, deviceId);
+		int count = this.userMakeTeaService.countMakeTeaRecordsByDeviceId(deviceId);
 		// TODO 还需要根据分页参数来查
-		List<MakeTeaRowRespDTO> rows = this.userMakeTeaService.queryMakeTeaRecordsByDeviceId(deviceId);
-		MakeTeaRespDTO makeTeaResp = new MakeTeaRespDTO(rows);
+		List<MakeTeaRowRespDTO> rows = this.userMakeTeaService.queryMakeTeaRecordsByDeviceId(new Query(params));
+		MakeTeaRespDTO makeTeaResp = new MakeTeaRespDTO(count, rows);
 		return CommonResp.ok(makeTeaResp);
 	}
 }

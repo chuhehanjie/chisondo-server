@@ -128,4 +128,8 @@
 		</foreach>
 	</delete>
 
+	<update id="setDefaultDevice">
+		update tb_user_device set default_tag = #{operFlag} where device_id = #{deviceId}
+	</update>
+
 </mapper>

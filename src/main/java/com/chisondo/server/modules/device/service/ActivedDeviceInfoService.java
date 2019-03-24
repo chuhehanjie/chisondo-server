@@ -3,6 +3,7 @@ package com.chisondo.server.modules.device.service;
 import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.modules.device.dto.req.SetDevNameReqDTO;
 import com.chisondo.server.modules.device.dto.req.SetDevPwdReqDTO;
+import com.chisondo.server.modules.device.dto.req.SetDevSoundReqDTO;
 import com.chisondo.server.modules.device.entity.ActivedDeviceInfoEntity;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,4 +42,6 @@ public interface ActivedDeviceInfoService {
     void updateDevPwd(SetDevPwdReqDTO setDevPwdReq);
 
     void updateDevNameOrDesc(SetDevNameReqDTO setDevNameReq);
+
+    void updateDevSound(SetDevSoundReqDTO setDevSoundReq);
 }

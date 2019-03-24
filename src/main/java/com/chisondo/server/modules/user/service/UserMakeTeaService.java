@@ -29,5 +29,7 @@ public interface UserMakeTeaService {
 	
 	void deleteBatch(Integer[] ids);
 
-    List<MakeTeaRowRespDTO> queryMakeTeaRecordsByDeviceId(String deviceId);
+    List<MakeTeaRowRespDTO> queryMakeTeaRecordsByDeviceId(Map<String, Object> params);
+
+    int countMakeTeaRecordsByDeviceId(String deviceId);
 }

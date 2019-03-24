@@ -28,4 +28,10 @@ public class Keys {
     public static final String USER_INFO = "userInfo";
 
     public static final String DEVICE_INFO = "deviceInfo";
+
+    public static final String PAGE = "page";
+
+    public static final String LIMIT = "limit";
+
+    public static final String OPER_FLAG = "operFlag";
 }

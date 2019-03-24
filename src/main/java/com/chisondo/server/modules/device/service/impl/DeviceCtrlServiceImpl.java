@@ -225,4 +225,21 @@ public class DeviceCtrlServiceImpl implements DeviceCtrlService {
 		this.deviceInfoService.updateDevNameOrDesc(setDevNameReq);
 		return CommonResp.ok();
 	}
+
+	@Override
+	public CommonResp setDeviceSound(CommonReq req) {
+		SetDevSoundReqDTO setDevSoundeq = JSONObject.parseObject(req.getBizBody(), SetDevSoundReqDTO.class);
+		// TODO 调用设备接口服务
+		this.deviceInfoService.updateDevSound(setDevSoundeq);
+		return CommonResp.ok();
+	}
+
+	@Override
+	public CommonResp setDefaultDevice(CommonReq req) {
+		JSONObject jsonObj = JSONObject.parseObject(req.getBizBody());
+		String deviceId = (String) req.getAttrByKey(Keys.DEVICE_ID);
+		int operFlag = jsonObj.getIntValue(Keys.OPER_FLAG);
+		this.userDeviceService.setDefaultDevice(ImmutableMap.of(Keys.DEVICE_ID, deviceId, Keys.OPER_FLAG, operFlag));
+		return CommonResp.ok();
+	}
 }

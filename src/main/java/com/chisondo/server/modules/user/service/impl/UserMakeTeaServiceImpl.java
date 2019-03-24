@@ -54,7 +54,12 @@ public class UserMakeTeaServiceImpl implements UserMakeTeaService {
 	}
 
 	@Override
-	public List<MakeTeaRowRespDTO> queryMakeTeaRecordsByDeviceId(String deviceId) {
-		return this.userMakeTeaDao.queryMakeTeaRecordsByDeviceId(deviceId);
+	public List<MakeTeaRowRespDTO> queryMakeTeaRecordsByDeviceId(Map<String, Object> params) {
+		return this.userMakeTeaDao.queryMakeTeaRecordsByDeviceId(params);
+	}
+
+	@Override
+	public int countMakeTeaRecordsByDeviceId(String deviceId) {
+		return this.userMakeTeaDao.countMakeTeaRecordsByDeviceId(deviceId);
 	}
 }

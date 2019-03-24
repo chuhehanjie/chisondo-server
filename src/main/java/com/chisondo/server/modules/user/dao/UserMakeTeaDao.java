@@ -6,6 +6,7 @@ import com.chisondo.server.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -17,5 +18,7 @@ import java.util.List;
 @Mapper
 public interface UserMakeTeaDao extends BaseDao<UserMakeTeaEntity> {
 
-    List<MakeTeaRowRespDTO> queryMakeTeaRecordsByDeviceId(String deviceId);
+    List<MakeTeaRowRespDTO> queryMakeTeaRecordsByDeviceId(Map<String, Object> params);
+
+    int countMakeTeaRecordsByDeviceId(String deviceId);
 }

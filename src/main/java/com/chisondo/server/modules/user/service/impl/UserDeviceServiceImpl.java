@@ -68,4 +68,9 @@ public class UserDeviceServiceImpl implements UserDeviceService {
 	public void delUserDeviceByParams(Map<String, Object> params) {
 		this.userDeviceDao.delUserDeviceByParams(params);
 	}
+
+	@Override
+	public void setDefaultDevice(Map<String, Object> params) {
+		this.userDeviceDao.setDefaultDevice(params);
+	}
 }

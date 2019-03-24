@@ -16,9 +16,9 @@ public class MakeTeaRespDTO implements Serializable {
     }
 
 
-    public MakeTeaRespDTO(List<MakeTeaRowRespDTO> rows) {
+    public MakeTeaRespDTO(int count, List<MakeTeaRowRespDTO> rows) {
         this.rows = rows;
-        this.count = rows.size();
+        this.count = count;
     }
 
     public int getCount() {

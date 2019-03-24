@@ -17,4 +17,6 @@ import java.util.Map;
 public interface UserDeviceDao extends BaseDao<UserDeviceEntity> {
 
     void delUserDeviceByParams(Map<String, Object> params);
+
+    void setDefaultDevice(Map<String, Object> params);
 }

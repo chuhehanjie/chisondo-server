@@ -244,7 +244,7 @@
 		</foreach>
 	</delete>
 
-	<select id="queryMakeTeaRecordsByDeviceId" parameterType="java.lang.String" resultType="com.chisondo.server.modules.device.dto.resp.MakeTeaRowRespDTO">
+	<select id="queryMakeTeaRecordsByDeviceId" resultType="com.chisondo.server.modules.device.dto.resp.MakeTeaRowRespDTO">
 		SELECT
 			umt.id as makeId,
 			dv.PHONE as phoneNum,
@@ -268,6 +268,18 @@
 		LEFT JOIN v_app_chapu c ON c.chapu_id = umt.chapu_id
 		where umt.device_id = #{deviceId}
 		order by umt.add_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="countMakeTeaRecordsByDeviceId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1)
+		FROM tb_user_make_tea umt
+		INNER JOIN t_data_vip dv ON dv.member_id = umt.teaman_id
+		LEFT JOIN v_app_chapu c ON c.chapu_id = umt.chapu_id
+		where umt.device_id = #{deviceId}
 	</select>
 
 </mapper>

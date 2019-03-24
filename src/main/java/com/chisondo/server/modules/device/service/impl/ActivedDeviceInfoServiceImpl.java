@@ -3,6 +3,7 @@ package com.chisondo.server.modules.device.service.impl;
 import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.modules.device.dto.req.SetDevNameReqDTO;
 import com.chisondo.server.modules.device.dto.req.SetDevPwdReqDTO;
+import com.chisondo.server.modules.device.dto.req.SetDevSoundReqDTO;
 import com.chisondo.server.modules.device.dto.resp.DevQueryRespDTO;
 import com.chisondo.server.modules.device.dto.resp.DevSettingInfoResp;
 import com.chisondo.server.modules.device.dto.resp.DeviceInfoRespDTO;
@@ -126,5 +127,10 @@ public class ActivedDeviceInfoServiceImpl implements ActivedDeviceInfoService {
 	@Override
 	public void updateDevNameOrDesc(SetDevNameReqDTO setDevNameReq) {
 		this.deviceInfoDao.updateDevNameOrDesc(setDevNameReq);
+	}
+
+	@Override
+	public void updateDevSound(SetDevSoundReqDTO setDevSoundReq) {
+		this.deviceInfoDao.updateDevSound(setDevSoundReq);
 	}
 }

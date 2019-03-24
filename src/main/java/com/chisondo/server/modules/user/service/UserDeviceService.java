@@ -2,7 +2,9 @@ package com.chisondo.server.modules.user.service;
 
 import com.chisondo.server.modules.device.dto.req.DeviceBindReqDTO;
 import com.chisondo.server.modules.user.entity.UserDeviceEntity;
+import com.google.common.collect.ImmutableMap;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -32,4 +34,6 @@ public interface UserDeviceService {
 	void save(DeviceBindReqDTO devBindReq, Long userId);
 
 	void delUserDeviceByParams(Map<String, Object> params);
+
+    void setDefaultDevice(Map<String, Object> params);
 }

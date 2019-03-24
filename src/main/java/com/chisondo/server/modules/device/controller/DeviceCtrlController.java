@@ -194,4 +194,28 @@ public class DeviceCtrlController extends AbstractController {
 	public CommonResp setDeviceNameOrDesc(@RequestBody CommonReq req) {
 		return this.deviceCtrlService.setDeviceNameOrDesc(req);
 	}
+
+	/**
+	 * 打开或关闭设备“滴声”提示音
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping("/api/rest/setDeviceSound")
+	@DevOperateLog("设置沏茶器名称/描述")
+	@ParamValidator({UserDevRelaValidator.class})
+	public CommonResp setDeviceSound(@RequestBody CommonReq req) {
+		return this.deviceCtrlService.setDeviceSound(req);
+	}
+
+	/**
+	 * 设置默认设备
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping("/api/rest/setDefaultDevice")
+	@DevOperateLog("设置沏茶器名称/描述")
+	@ParamValidator({UserDevRelaValidator.class})
+	public CommonResp setDefaultDevice(@RequestBody CommonReq req) {
+		return this.deviceCtrlService.setDefaultDevice(req);
+	}
 }

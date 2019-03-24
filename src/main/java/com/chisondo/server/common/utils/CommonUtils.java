@@ -3,6 +3,7 @@ package com.chisondo.server.common.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
+import com.google.common.collect.Maps;
 import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -91,5 +92,12 @@ public final class CommonUtils {
         jsonObject.put("name", "chris");
         jsonObject.put("job", "java");
         System.out.println(jsonObject);
+    }
+
+    public static Map<String, Object> getPageParams(JSONObject jsonObj) {
+        Map<String, Object> params = Maps.newHashMap();
+        params.put(Keys.PAGE, ValidateUtils.isNotEmpty(jsonObj.get(Keys.PAGE)) ? jsonObj.get(Keys.PAGE) : "1");
+        params.put(Keys.LIMIT, ValidateUtils.isNotEmpty(jsonObj.get(Keys.LIMIT)) ? jsonObj.get(Keys.LIMIT) : "10");
+        return params;
     }
 }
