@@ -1,8 +1,12 @@
 package com.chisondo.server.modules.device.service.impl;
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
+import com.chisondo.server.common.utils.Constant;
 import com.chisondo.server.common.utils.ValidateUtils;
+import com.chisondo.server.modules.device.dto.req.DevStatusReportReq;
 import com.chisondo.server.modules.device.dto.req.DeviceBindReqDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +20,7 @@ import com.chisondo.server.modules.device.service.DeviceStateInfoService;
 
 
 @Service("deviceStateInfoService")
+@Slf4j
 public class DeviceStateInfoServiceImpl implements DeviceStateInfoService {
 	@Autowired
 	private DeviceStateInfoDao deviceStateInfoDao;
@@ -77,5 +82,35 @@ public class DeviceStateInfoServiceImpl implements DeviceStateInfoService {
 		devStateInfo.setCity(devBindReq.getCity());
 		devStateInfo.setDistrict(devBindReq.getDistrict());
 		devStateInfo.setAddress(devBindReq.getDetaddress());
+	}
+
+	@Override
+	public void updateDevStatus(DevStatusReportReq devStatusReportReq) {
+		DeviceStateInfoEntity devStateInfo = this.buildDevStateInfo(devStatusReportReq);
+		log.info("devStateInfo JSON = {}", JSONObject.toJSONString(devStateInfo));
+		this.update(devStateInfo);
+		log.info("updateDevStatus success");
+	}
+
+	private DeviceStateInfoEntity buildDevStateInfo(DevStatusReportReq devStatusReportReq) {
+		DeviceStateInfoEntity devStateInfo = new DeviceStateInfoEntity();
+		devStateInfo.setDeviceId(Integer.valueOf(devStatusReportReq.getDeviceID()));
+		devStateInfo.setOnlineState(Constant.OnlineState.YES);
+//		devStateInfo.setDeviceStateInfo("");
+		devStateInfo.setConnectState(Constant.ConnectState.CONNECTED);
+		devStateInfo.setUpdateTime(new Date());
+		devStateInfo.setLastConnTime(new Date());
+		devStateInfo.setLastValTime(devStatusReportReq.getTcpValTime());
+		devStateInfo.setMakeTemp(devStatusReportReq.getMsg().getTemperature());
+		devStateInfo.setTemp(devStatusReportReq.getMsg().getTemperature());
+		devStateInfo.setWarm(devStatusReportReq.getMsg().getWarmstatus());
+		devStateInfo.setDensity(devStatusReportReq.getMsg().getTaststatus());
+		devStateInfo.setWaterlv(devStatusReportReq.getMsg().getWaterlevel());
+		devStateInfo.setMakeDura(devStatusReportReq.getMsg().getSoak());
+		devStateInfo.setReamin(Integer.valueOf(devStatusReportReq.getMsg().getRemaintime()));
+		devStateInfo.setTea(Constant.ErrorStatus.LACK_TEA == devStatusReportReq.getMsg().getErrorstatus() ? 1 : 0);
+		devStateInfo.setWater(Constant.ErrorStatus.LACK_WATER == devStatusReportReq.getMsg().getErrorstatus() ? 1 : 0);
+		devStateInfo.setWork(devStatusReportReq.getMsg().getWorkstatus());
+		return devStateInfo;
 	}
 }

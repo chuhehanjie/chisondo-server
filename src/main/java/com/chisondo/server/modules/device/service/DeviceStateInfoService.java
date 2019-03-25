@@ -1,7 +1,9 @@
 package com.chisondo.server.modules.device.service;
 
+import com.chisondo.server.modules.device.dto.req.DevStatusReportReq;
 import com.chisondo.server.modules.device.dto.req.DeviceBindReqDTO;
 import com.chisondo.server.modules.device.entity.DeviceStateInfoEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -31,4 +33,6 @@ public interface DeviceStateInfoService {
 
     void saveOrUpdate(DeviceBindReqDTO devBindReq);
 
+    @Transactional
+    void updateDevStatus(DevStatusReportReq devStatusReportReq);
 }

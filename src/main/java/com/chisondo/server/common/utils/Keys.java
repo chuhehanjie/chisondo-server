@@ -34,4 +34,6 @@ public class Keys {
     public static final String LIMIT = "limit";
 
     public static final String OPER_FLAG = "operFlag";
+
+    public static final String EXCLUDE_AUTH_URL = "EXCLUDE_AUTH_URL";
 }

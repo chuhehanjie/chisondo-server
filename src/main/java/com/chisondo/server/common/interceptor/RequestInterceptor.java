@@ -27,8 +27,8 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
-        // 未开启鉴权，直接放行
-        if (!this.isAuthEnable()) {
+        // 未开启鉴权或是不需要鉴权的请求，则直接放行
+        if (!this.isAuthEnable() || this.isReqExcludeAuth(request)) {
             return true;
         }
         String acckey = request.getHeader(Keys.ACCKEY);
@@ -54,6 +54,20 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         return true;
+    }
+
+    private boolean isReqExcludeAuth(HttpServletRequest request) {
+        String excludeAuthURL = CacheDataUtils.getConfigValueByKey(Keys.EXCLUDE_AUTH_URL);
+        if (ValidateUtils.isNotEmptyString(excludeAuthURL)) {
+            String[] excludeAuthURLs = excludeAuthURL.split(",");
+            for (String url : excludeAuthURLs) {
+                if (request.getRequestURI().contains(url)) {
+                    log.info("url [{}] no need auth", url);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

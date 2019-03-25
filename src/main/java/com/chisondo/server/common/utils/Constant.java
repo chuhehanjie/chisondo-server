@@ -33,6 +33,17 @@ public class Constant {
         int NOT_CONNECTED = 0;
     }
 
+    public interface OnlineState {
+        /**
+         * 在线
+         */
+        int YES = 1;
+        /**
+         * 不在线
+         */
+        int NO = 0;
+    }
+
     public interface RegSrc {
         String CHISONDO = "泉笙道";
     }
@@ -68,6 +79,17 @@ public class Constant {
     public interface RespResult {
         int SUCCESS = 1;
         int FAILED = 0;
+    }
+
+    /**
+     * 异常状态
+     */
+    public interface ErrorStatus {
+        int NORMAL = 0; // 正常
+        int LACK_WATER = 1; // 缺水
+        int LACK_TEA = 2; // 缺茶
+        int LACK_WATER_TEA = 3; // 缺水缺茶
+        int NOT_CONNECTED_WIFI = 4; // 未连接Wi-Fi
     }
 
 }
