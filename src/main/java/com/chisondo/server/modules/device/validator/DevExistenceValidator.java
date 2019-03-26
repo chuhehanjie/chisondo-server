@@ -25,9 +25,9 @@ public class DevExistenceValidator implements BusiValidator {
     public void validate(CommonReq req) {
         JSONObject jsonObj = JSONObject.parseObject(req.getBizBody());
         String deviceId = jsonObj.getString("deviceId");
-        if (ValidateUtils.isEmptyString(deviceId)) {
+        /*if (ValidateUtils.isEmptyString(deviceId)) {
             throw new CommonException("设备ID为空");
-        }
+        }*/
         ActivedDeviceInfoEntity deviceInfo = this.deviceInfoService.getDeviceInfoById(deviceId);
         if (ValidateUtils.isEmpty(deviceInfo)) {
             throw new CommonException("设备信息不存在");

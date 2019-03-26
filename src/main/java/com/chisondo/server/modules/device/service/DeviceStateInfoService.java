@@ -1,5 +1,7 @@
 package com.chisondo.server.modules.device.service;
 
+import com.chisondo.server.common.http.CommonReq;
+import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.modules.device.dto.req.DevStatusReportReq;
 import com.chisondo.server.modules.device.dto.req.DeviceBindReqDTO;
 import com.chisondo.server.modules.device.entity.DeviceStateInfoEntity;
@@ -17,7 +19,7 @@ import java.util.Map;
  */
 public interface DeviceStateInfoService {
 	
-	DeviceStateInfoEntity queryObject(Integer deviceId);
+	DeviceStateInfoEntity queryObject(String deviceId);
 	
 	List<DeviceStateInfoEntity> queryList(Map<String, Object> map);
 	
@@ -35,4 +37,5 @@ public interface DeviceStateInfoService {
 
     @Transactional
     void updateDevStatus(DevStatusReportReq devStatusReportReq);
+
 }

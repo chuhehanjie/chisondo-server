@@ -3,15 +3,15 @@ package com.chisondo.server.modules.device.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
-import com.chisondo.server.common.utils.CommonUtils;
-import com.chisondo.server.common.utils.Keys;
-import com.chisondo.server.common.utils.Query;
-import com.chisondo.server.common.utils.ValidateUtils;
+import com.chisondo.server.common.utils.*;
+import com.chisondo.server.modules.device.dto.req.DevStatusReportReq;
 import com.chisondo.server.modules.device.dto.resp.DevSettingInfoResp;
 import com.chisondo.server.modules.device.dto.resp.MakeTeaRespDTO;
 import com.chisondo.server.modules.device.dto.resp.MakeTeaRowRespDTO;
+import com.chisondo.server.modules.device.entity.DeviceStateInfoEntity;
 import com.chisondo.server.modules.device.service.ActivedDeviceInfoService;
 import com.chisondo.server.modules.device.service.DeviceQueryService;
+import com.chisondo.server.modules.device.service.DeviceStateInfoService;
 import com.chisondo.server.modules.user.service.UserMakeTeaService;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +28,12 @@ public class DeviceQueryServiceImpl implements DeviceQueryService {
 
 	@Autowired
 	private UserMakeTeaService userMakeTeaService;
+
+	@Autowired
+	private DeviceStateInfoService deviceStateInfoService;
+
+	@Autowired
+	private RedisUtils redisUtils;
 	
 	@Override
 	public CommonResp queryDevSettingInfo(String deviceId) {
@@ -92,9 +98,26 @@ public class DeviceQueryServiceImpl implements DeviceQueryService {
 		Map<String, Object> params = CommonUtils.getPageParams(jsonObj);
 		params.put(Keys.DEVICE_ID, deviceId);
 		int count = this.userMakeTeaService.countMakeTeaRecordsByDeviceId(deviceId);
-		// TODO 还需要根据分页参数来查
 		List<MakeTeaRowRespDTO> rows = this.userMakeTeaService.queryMakeTeaRecordsByDeviceId(new Query(params));
 		MakeTeaRespDTO makeTeaResp = new MakeTeaRespDTO(count, rows);
 		return CommonResp.ok(makeTeaResp);
+	}
+
+	@Override
+	public CommonResp queryDevStateInfo(CommonReq req) {
+		String deviceId = (String) req.getAttrByKey(Keys.DEVICE_ID);
+		// 首先从 redis 取
+		String devStateInfoStr = this.redisUtils.get(deviceId);
+		if (ValidateUtils.isNotEmptyString(devStateInfoStr)) {
+			DevStatusReportReq devStatusReportReq = JSONObject.parseObject(devStateInfoStr, DevStatusReportReq.class);
+			DeviceStateInfoEntity devStateInfo = CommonUtils.convert2DevStateInfo(devStatusReportReq);
+			devStateInfo.setOnlineState(Constant.OnlineState.YES);
+			devStateInfo.setConnectState(Constant.ConnectState.CONNECTED);
+			return CommonResp.ok(devStateInfo);
+		} else {
+			// 从数据库中取
+			DeviceStateInfoEntity devStateInfo = this.deviceStateInfoService.queryObject(deviceId);
+			return CommonResp.ok(devStateInfo);
+		}
 	}
 }

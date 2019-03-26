@@ -29,6 +29,11 @@ public class CommonReq implements Serializable {
      */
     private String bizBody;
 
+    /**
+     * 是否老设备
+     */
+    private boolean isOldDev;
+
     private Map<String, Object> extAttrs = Maps.newHashMap();
 
     public String getAcckey() {
@@ -69,5 +74,13 @@ public class CommonReq implements Serializable {
 
     public Object getAttrByKey(String key) {
         return this.extAttrs.get(key);
+    }
+
+    public boolean isOldDev() {
+        return isOldDev;
+    }
+
+    public void setOldDev(boolean oldDev) {
+        isOldDev = oldDev;
     }
 }

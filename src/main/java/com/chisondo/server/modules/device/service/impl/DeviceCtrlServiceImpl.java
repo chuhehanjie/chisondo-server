@@ -56,57 +56,49 @@ public class DeviceCtrlServiceImpl implements DeviceCtrlService {
 	private UserBookService userBookService;
 
 	@Override
-	public CommonResp startOrReserveTea(StartOrReserveTeaReqDTO startOrReserveTeaReq) {
-		UserVipEntity user = this.userVipService.getUserByMobile(startOrReserveTeaReq.getPhoneNum());
-		if (ValidateUtils.isEmpty(user)) {
-			throw new CommonException("用户不存在");
-		}
+	public CommonResp startOrReserveTea(CommonReq req) {
+		StartOrReserveTeaReqDTO startOrReserveTeaReq = JSONObject.parseObject(req.getBizBody(), StartOrReserveTeaReqDTO.class);
+		UserVipEntity user = (UserVipEntity) req.getAttrByKey(Keys.USER_INFO);
 		int actionFlag = 1;
 		boolean isReserveTea = true;
 		// 是否启动泡茶
 		if (this.isStartTea(startOrReserveTeaReq.getStartTime())) {
 			isReserveTea = false;
 		}
-		// 判断是否为老设备
-		if (CommonUtils.isOldDevice(startOrReserveTeaReq.getDeviceId())) {
-			// TODO 调用老设备 http 请求
+		// TODO 调用新设备接口服务 小程序http -->> 设备 http -->> 设备 tcp -->> 沏茶器
+		/*新设备非预约泡茶直接入4.5.3用户泡茶表；预约泡茶入4.5.4用户预约泡茶表，后端由定时程序根据预约时间自动启动泡茶信息，修改4.5.4表记录状态，
+		并将泡茶信息插入4.5.3用户泡茶表；*/
+		if (isReserveTea) {
+			UserBookEntity userBook = new UserBookEntity();
+			userBook.setTeamanId(user.getMemberId().toString());
+			userBook.setDeviceId(Integer.valueOf(startOrReserveTeaReq.getDeviceId()));
+			userBook.setConfigCmd("AA0B012C0F89025A023CCC"); // TODO 需要确定这个值怎么取
+			userBook.setProcessTime(new Date());
+			userBook.setLogTime(new Date());
+			userBook.setValidFlag(0);
+			userBook.setChapuId(0);
+			userBook.setInformFlag(0);
+			userBook.setTeaSortId(startOrReserveTeaReq.getTeaSortId());
+			userBook.setTeaSortName(startOrReserveTeaReq.getTeaSortName());
+			this.userBookService.save(userBook);
 		} else {
-			// TODO 调用新设备接口服务 小程序http -->> 设备 http -->> 设备 tcp -->> 沏茶器
-			/*新设备非预约泡茶直接入4.5.3用户泡茶表；预约泡茶入4.5.4用户预约泡茶表，后端由定时程序根据预约时间自动启动泡茶信息，修改4.5.4表记录状态，
-			并将泡茶信息插入4.5.3用户泡茶表；*/
-			if (isReserveTea) {
-				UserBookEntity userBook = new UserBookEntity();
-				userBook.setTeamanId(user.getMemberId().toString());
-				userBook.setDeviceId(Integer.valueOf(startOrReserveTeaReq.getDeviceId()));
-				userBook.setConfigCmd("AA0B012C0F89025A023CCC"); // TODO 需要确定这个值怎么取
-				userBook.setProcessTime(new Date());
-				userBook.setLogTime(new Date());
-				userBook.setValidFlag(0);
-				userBook.setChapuId(0);
-				userBook.setInformFlag(0);
-				userBook.setTeaSortId(startOrReserveTeaReq.getTeaSortId());
-				userBook.setTeaSortName(startOrReserveTeaReq.getTeaSortName());
-				this.userBookService.save(userBook);
-			} else {
-				UserMakeTeaEntity userMakeTea = new UserMakeTeaEntity();
-				userMakeTea.setTeamanId(user.getMemberId().toString());
-				userMakeTea.setDeviceId(Integer.valueOf(startOrReserveTeaReq.getDeviceId()));
-				userMakeTea.setChapuId(0);
-				userMakeTea.setMaxNum(0);
-				userMakeTea.setMakeIndex(0);
-				userMakeTea.setAddTime(new Date());
-				userMakeTea.setStatus(0);
-				userMakeTea.setTemperature(startOrReserveTeaReq.getTemperature());
-				userMakeTea.setWarm(0);
-				userMakeTea.setSoak(startOrReserveTeaReq.getSoak());
-				userMakeTea.setTeaSortId(startOrReserveTeaReq.getTeaSortId());
-				userMakeTea.setTeaSortName(startOrReserveTeaReq.getTeaSortName());
-				userMakeTea.setMakeType(Constant.MakeTeaType.TEA_SPECTRUM);
-				userMakeTea.setBarcode("");
-				userMakeTea.setDensity(0);
-				this.userMakeTeaService.save(userMakeTea);
-			}
-
+			UserMakeTeaEntity userMakeTea = new UserMakeTeaEntity();
+			userMakeTea.setTeamanId(user.getMemberId().toString());
+			userMakeTea.setDeviceId(Integer.valueOf(startOrReserveTeaReq.getDeviceId()));
+			userMakeTea.setChapuId(0);
+			userMakeTea.setMaxNum(0);
+			userMakeTea.setMakeIndex(0);
+			userMakeTea.setAddTime(new Date());
+			userMakeTea.setStatus(0);
+			userMakeTea.setTemperature(startOrReserveTeaReq.getTemperature());
+			userMakeTea.setWarm(0);
+			userMakeTea.setSoak(startOrReserveTeaReq.getSoak());
+			userMakeTea.setTeaSortId(startOrReserveTeaReq.getTeaSortId());
+			userMakeTea.setTeaSortName(startOrReserveTeaReq.getTeaSortName());
+			userMakeTea.setMakeType(Constant.MakeTeaType.TEA_SPECTRUM);
+			userMakeTea.setBarcode("");
+			userMakeTea.setDensity(0);
+			this.userMakeTeaService.save(userMakeTea);
 		}
 		// TODO 接口暂未实现 返回默认的预约号
 		return CommonResp.ok(RandomStringUtils.randomAlphanumeric(20));

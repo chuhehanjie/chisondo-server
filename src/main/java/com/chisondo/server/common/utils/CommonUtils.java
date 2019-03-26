@@ -3,6 +3,8 @@ package com.chisondo.server.common.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
+import com.chisondo.server.modules.device.dto.req.DevStatusReportReq;
+import com.chisondo.server.modules.device.entity.DeviceStateInfoEntity;
 import com.google.common.collect.Maps;
 import org.apache.commons.io.IOUtils;
 
@@ -99,5 +101,23 @@ public final class CommonUtils {
         params.put(Keys.PAGE, ValidateUtils.isNotEmpty(jsonObj.get(Keys.PAGE)) ? jsonObj.get(Keys.PAGE) : "1");
         params.put(Keys.LIMIT, ValidateUtils.isNotEmpty(jsonObj.get(Keys.LIMIT)) ? jsonObj.get(Keys.LIMIT) : "10");
         return params;
+    }
+
+    public static DeviceStateInfoEntity convert2DevStateInfo(DevStatusReportReq devStatusReportReq) {
+        DeviceStateInfoEntity devStateInfo = new DeviceStateInfoEntity();
+        devStateInfo.setDeviceId(Integer.valueOf(devStatusReportReq.getDeviceID()));
+//		devStateInfo.setDeviceStateInfo("");
+        devStateInfo.setLastValTime(devStatusReportReq.getTcpValTime());
+        devStateInfo.setMakeTemp(devStatusReportReq.getMsg().getTemperature());
+        devStateInfo.setTemp(devStatusReportReq.getMsg().getTemperature());
+        devStateInfo.setWarm(devStatusReportReq.getMsg().getWarmstatus());
+        devStateInfo.setDensity(devStatusReportReq.getMsg().getTaststatus());
+        devStateInfo.setWaterlv(devStatusReportReq.getMsg().getWaterlevel());
+        devStateInfo.setMakeDura(devStatusReportReq.getMsg().getSoak());
+        devStateInfo.setReamin(Integer.valueOf(devStatusReportReq.getMsg().getRemaintime()));
+        devStateInfo.setTea(Constant.ErrorStatus.LACK_TEA == devStatusReportReq.getMsg().getErrorstatus() ? 1 : 0);
+        devStateInfo.setWater(Constant.ErrorStatus.LACK_WATER == devStatusReportReq.getMsg().getErrorstatus() ? 1 : 0);
+        devStateInfo.setWork(devStatusReportReq.getMsg().getWorkstatus());
+        return devStateInfo;
     }
 }

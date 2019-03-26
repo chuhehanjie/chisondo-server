@@ -19,4 +19,11 @@ public interface DeviceQueryService {
 	 * @return
 	 */
 	CommonResp queryMakeTeaRecordsOfDev(CommonReq req);
+
+	/**
+	 * 查询设备状态信息
+	 * @param req
+	 * @return
+	 */
+    CommonResp queryDevStateInfo(CommonReq req);
 }

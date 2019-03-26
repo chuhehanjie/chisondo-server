@@ -215,8 +215,8 @@
 			a.online_state AS onlinStatus,
 			b.default_tag AS defaultFlag,
 			IFNULL(d.validTeaCount,0) AS reserveNum,
-			'127.0.0.1' AS ipAddress,
-			'MT123.jpg' AS deviceImg,
+			a.client_ip_address AS ipAddress,
+			dc.image_large AS deviceImg,
 			a.province,
 			a.city,
 			a.district,
@@ -230,6 +230,7 @@
 		INNER JOIN tb_actived_device_info dev ON dev.device_id = a.device_id
 		INNER JOIN tb_company cmp ON cmp.id = dev.company_id
 		INNER JOIN t_data_vip c ON b.teaman_id = c.MEMBER_ID
+		INNER JOIN tb_device_color dc ON dev.device_type_id = dc.device_type_id
 		LEFT JOIN (select count(1) validTeaCount,device_id FROM tb_user_book where valid_flag in (0,1) group by device_id) d ON d.device_id = a.device_id
 		where c.PHONE = #{userMobile}
 	</select>

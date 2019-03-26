@@ -34,10 +34,14 @@ public class DeviceCtrlController extends AbstractController {
 	 * 设置参数并启动泡茶，或提前预约在指定的时间开始沏茶，按茶类沏茶或自己设置参数沏茶，非茶谱沏茶
 	 */
 	@RequestMapping("/api/rest/startWorking")
+	@ParamValidator({UserDevRelaValidator.class})
 	public CommonResp startOrReserveTea(@RequestBody CommonReq req){
-		StartOrReserveTeaReqDTO startOrReserveTeaReq = JSONObject.parseObject(req.getBizBody(), StartOrReserveTeaReqDTO.class);
+		if (req.isOldDev()) {
+			// TODO 走老设备流程
+		}
+
 		// TODO 校验
-        return this.deviceCtrlService.startOrReserveTea(startOrReserveTeaReq);
+        return this.deviceCtrlService.startOrReserveTea(req);
 	}
 
 	/**

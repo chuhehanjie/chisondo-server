@@ -16,11 +16,11 @@ public interface DeviceCtrlService {
 
 	/**
 	 * 开启或预约泡茶
-	 * @param startOrReserveTeaReq
+	 * @param req
 	 * @return
 	 */
 	@Transactional
-	CommonResp startOrReserveTea(StartOrReserveTeaReqDTO startOrReserveTeaReq);
+	CommonResp startOrReserveTea(CommonReq req);
 
 	@Transactional
 	DeviceBindRespDTO bindDevice(CommonReq devBindReq);

@@ -8,7 +8,6 @@ import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.common.utils.Keys;
 import com.chisondo.server.common.utils.ValidateUtils;
-import com.chisondo.server.modules.device.entity.DeviceStateInfoEntity;
 import com.chisondo.server.modules.device.service.ActivedDeviceInfoService;
 import com.chisondo.server.modules.device.service.DeviceQueryService;
 import com.chisondo.server.modules.device.service.DeviceStateInfoService;
@@ -27,8 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DeviceQueryController extends AbstractController {
 
-	@Autowired
-	private DeviceStateInfoService deviceStateInfoService;
 
 	@Autowired
 	private ActivedDeviceInfoService deviceInfoService;
@@ -42,14 +39,8 @@ public class DeviceQueryController extends AbstractController {
 	@RequestMapping("/api/rest/qryDevStatus")
 	@ParamValidator({DevExistenceValidator.class})
 	public CommonResp queryDeviceStatus(@RequestBody CommonReq req) {
-		JSONObject jsonObj = JSONObject.parseObject(req.getBizBody());
-		if (ValidateUtils.isEmpty(jsonObj) || ValidateUtils.isEmptyString(jsonObj.getString(Keys.DEVICE_ID))) {
-			throw new CommonException("设备ID为空");
-		}
-		String deviceId = jsonObj.getString(Keys.DEVICE_ID);
 		// TODO 直接从 redis 查询设备状态
-		DeviceStateInfoEntity devStateInfo = this.deviceStateInfoService.queryObject(Integer.valueOf(deviceId));
-		return CommonResp.ok(devStateInfo);
+		return this.deviceQueryService.queryDevStateInfo(req);
 	}
 
 	/**
