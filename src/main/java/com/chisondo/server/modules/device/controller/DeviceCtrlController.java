@@ -4,11 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.chisondo.server.common.annotation.DevOperateLog;
 import com.chisondo.server.common.annotation.ParamValidator;
 import com.chisondo.server.common.core.AbstractController;
-import com.chisondo.server.common.exception.CommonException;
 import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.common.utils.Keys;
-import com.chisondo.server.common.utils.ValidateUtils;
 import com.chisondo.server.modules.device.dto.req.*;
 import com.chisondo.server.modules.device.dto.resp.DeviceBindRespDTO;
 import com.chisondo.server.modules.device.service.DeviceCtrlService;
@@ -34,14 +32,13 @@ public class DeviceCtrlController extends AbstractController {
 	 * 设置参数并启动泡茶，或提前预约在指定的时间开始沏茶，按茶类沏茶或自己设置参数沏茶，非茶谱沏茶
 	 */
 	@RequestMapping("/api/rest/startWorking")
-	@ParamValidator({UserDevRelaValidator.class})
-	public CommonResp startOrReserveTea(@RequestBody CommonReq req){
+	@ParamValidator({UserDevRelaValidator.class, StartOrReserveMakeTeaValidator.class})
+	@DevOperateLog("启动或预约泡茶")
+	public CommonResp startOrReserveMakeTea(@RequestBody CommonReq req){
 		if (req.isOldDev()) {
 			// TODO 走老设备流程
 		}
-
-		// TODO 校验
-        return this.deviceCtrlService.startOrReserveTea(req);
+        return this.deviceCtrlService.startOrReserveMakeTea(req);
 	}
 
 	/**

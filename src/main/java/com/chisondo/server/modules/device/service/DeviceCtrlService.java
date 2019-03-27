@@ -20,7 +20,7 @@ public interface DeviceCtrlService {
 	 * @return
 	 */
 	@Transactional
-	CommonResp startOrReserveTea(CommonReq req);
+	CommonResp startOrReserveMakeTea(CommonReq req);
 
 	@Transactional
 	DeviceBindRespDTO bindDevice(CommonReq devBindReq);

@@ -21,9 +21,6 @@ import java.util.Map;
 @Slf4j
 public class RestTemplateUtils {
 
-    @Value("${chris.interface.url.accessControl}")
-    public String accessControlURL;
-
     @Autowired
     private RestTemplate restTemplate;
 

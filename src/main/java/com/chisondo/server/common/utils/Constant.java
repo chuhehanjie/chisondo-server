@@ -11,9 +11,6 @@ import java.util.Map;
  * @date Mar 12.19
  */
 public class Constant {
-    public static final int VERIFY_CODE_LENGTH = 4;
-
-    public static final String SMS_SEND_OK = "OK";
 
     public static final String ROOT_NODE_ID = "-1";
 
@@ -90,6 +87,33 @@ public class Constant {
         int LACK_TEA = 2; // 缺茶
         int LACK_WATER_TEA = 3; // 缺水缺茶
         int NOT_CONNECTED_WIFI = 4; // 未连接Wi-Fi
+    }
+
+    public interface DevStartWorkAction {
+        int MAKE_TEA = 1; // 沏茶
+        int WASH_TEA = 2; // 洗茶
+        int BOIL_WATER = 3; // 洗茶
+    }
+
+    /**
+     * 用户预约泡茶状态
+     */
+    public interface UserBookStatus {
+        int VALID = 0; // 有效
+        int SUCCESS = 1; // 已成功执行
+        int CANCELED = 2; // 已取消
+        int EXPIRED = 3; // 已过期且未成功执行
+    }
+
+
+    public interface TemperatureValue {
+        int MIN = 60;
+        int MAX = 100;
+    }
+
+    public interface SoakTime {
+        int MIN = 0;
+        int MAX = 600;
     }
 
 }

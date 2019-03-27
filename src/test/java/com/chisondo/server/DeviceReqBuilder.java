@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.modules.device.dto.req.DeviceBindReqDTO;
 import com.chisondo.server.modules.device.dto.req.MakeTeaByTeaSpectrumReqDTO;
-import com.chisondo.server.modules.device.dto.req.StartOrReserveTeaReqDTO;
+import com.chisondo.server.modules.device.dto.req.StartOrReserveMakeTeaReqDTO;
 
 public class DeviceReqBuilder {
 
@@ -34,7 +34,7 @@ public class DeviceReqBuilder {
         req.setAcckey("7788520");
         req.setReqsrc(0);
         req.setTimestamp(System.currentTimeMillis() + "");
-        StartOrReserveTeaReqDTO teaReqDTO = new StartOrReserveTeaReqDTO();
+        StartOrReserveMakeTeaReqDTO teaReqDTO = new StartOrReserveMakeTeaReqDTO();
         teaReqDTO.setDeviceId("17048865");
         teaReqDTO.setPhoneNum("15873230762");
         teaReqDTO.setStartTime("2019-03-18 01:38:30");

@@ -2,7 +2,6 @@ package com.chisondo.server.modules.device.service.impl;
 import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
-import com.chisondo.server.common.exception.CommonException;
 import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.common.utils.*;
@@ -12,6 +11,9 @@ import com.chisondo.server.modules.device.entity.ActivedDeviceInfoEntity;
 import com.chisondo.server.modules.device.service.ActivedDeviceInfoService;
 import com.chisondo.server.modules.device.service.DeviceCtrlService;
 import com.chisondo.server.modules.device.service.DeviceStateInfoService;
+import com.chisondo.server.modules.http2dev.request.DeviceHttpReq;
+import com.chisondo.server.modules.http2dev.response.DeviceHttpResp;
+import com.chisondo.server.modules.http2dev.service.Http2DevService;
 import com.chisondo.server.modules.user.entity.UserBookEntity;
 import com.chisondo.server.modules.user.entity.UserMakeTeaEntity;
 import com.chisondo.server.modules.user.entity.UserVipEntity;
@@ -21,10 +23,8 @@ import com.chisondo.server.modules.user.service.UserVipService;
 import com.chisondo.server.modules.user.service.UserDeviceService;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 
 /**
@@ -55,53 +55,69 @@ public class DeviceCtrlServiceImpl implements DeviceCtrlService {
 	@Autowired
 	private UserBookService userBookService;
 
+	@Autowired
+	private Http2DevService http2DevService;
+
 	@Override
-	public CommonResp startOrReserveTea(CommonReq req) {
-		StartOrReserveTeaReqDTO startOrReserveTeaReq = JSONObject.parseObject(req.getBizBody(), StartOrReserveTeaReqDTO.class);
+	public CommonResp startOrReserveMakeTea(CommonReq req) {
+		StartOrReserveMakeTeaReqDTO startOrReserveTeaReq = JSONObject.parseObject(req.getBizBody(), StartOrReserveMakeTeaReqDTO.class);
 		UserVipEntity user = (UserVipEntity) req.getAttrByKey(Keys.USER_INFO);
-		int actionFlag = 1;
-		boolean isReserveTea = true;
 		// 是否启动泡茶
 		if (this.isStartTea(startOrReserveTeaReq.getStartTime())) {
-			isReserveTea = false;
-		}
-		// TODO 调用新设备接口服务 小程序http -->> 设备 http -->> 设备 tcp -->> 沏茶器
-		/*新设备非预约泡茶直接入4.5.3用户泡茶表；预约泡茶入4.5.4用户预约泡茶表，后端由定时程序根据预约时间自动启动泡茶信息，修改4.5.4表记录状态，
-		并将泡茶信息插入4.5.3用户泡茶表；*/
-		if (isReserveTea) {
-			UserBookEntity userBook = new UserBookEntity();
-			userBook.setTeamanId(user.getMemberId().toString());
-			userBook.setDeviceId(Integer.valueOf(startOrReserveTeaReq.getDeviceId()));
-			userBook.setConfigCmd("AA0B012C0F89025A023CCC"); // TODO 需要确定这个值怎么取
-			userBook.setProcessTime(new Date());
-			userBook.setLogTime(new Date());
-			userBook.setValidFlag(0);
-			userBook.setChapuId(0);
-			userBook.setInformFlag(0);
-			userBook.setTeaSortId(startOrReserveTeaReq.getTeaSortId());
-			userBook.setTeaSortName(startOrReserveTeaReq.getTeaSortName());
+			UserBookEntity userBook = this.buildUserBook(startOrReserveTeaReq, user);
 			this.userBookService.save(userBook);
+			return CommonResp.ok(ImmutableMap.of(Keys.RESERV_NO, userBook.getReservNo()));
 		} else {
-			UserMakeTeaEntity userMakeTea = new UserMakeTeaEntity();
-			userMakeTea.setTeamanId(user.getMemberId().toString());
-			userMakeTea.setDeviceId(Integer.valueOf(startOrReserveTeaReq.getDeviceId()));
-			userMakeTea.setChapuId(0);
-			userMakeTea.setMaxNum(0);
-			userMakeTea.setMakeIndex(0);
-			userMakeTea.setAddTime(new Date());
-			userMakeTea.setStatus(0);
-			userMakeTea.setTemperature(startOrReserveTeaReq.getTemperature());
-			userMakeTea.setWarm(0);
-			userMakeTea.setSoak(startOrReserveTeaReq.getSoak());
-			userMakeTea.setTeaSortId(startOrReserveTeaReq.getTeaSortId());
-			userMakeTea.setTeaSortName(startOrReserveTeaReq.getTeaSortName());
-			userMakeTea.setMakeType(Constant.MakeTeaType.TEA_SPECTRUM);
-			userMakeTea.setBarcode("");
-			userMakeTea.setDensity(0);
-			this.userMakeTeaService.save(userMakeTea);
+			// TODO 调用新设备接口服务 小程序http -->> 设备 http -->> 设备 tcp -->> 沏茶器
+			/*新设备非预约泡茶直接入4.5.3用户泡茶表；预约泡茶入4.5.4用户预约泡茶表，后端由定时程序根据预约时间自动启动泡茶信息，修改4.5.4表记录状态，
+			并将泡茶信息插入4.5.3用户泡茶表；*/
+			DeviceHttpReq devHttpReq = new DeviceHttpReq(startOrReserveTeaReq);
+			DeviceHttpResp devHttpResp = this.http2DevService.makeTea(devHttpReq);
+			if (devHttpResp.isOK()) {
+				UserMakeTeaEntity userMakeTea = this.buildUserMakeTea(startOrReserveTeaReq, user, devHttpResp);
+				this.userMakeTeaService.save(userMakeTea);
+				return CommonResp.ok();
+			} else {
+				// 设备接口服务返回失败
+				return CommonResp.error(devHttpResp.getRetn(), devHttpResp.getDesc());
+			}
 		}
-		// TODO 接口暂未实现 返回默认的预约号
-		return CommonResp.ok(RandomStringUtils.randomAlphanumeric(20));
+	}
+
+	private UserBookEntity buildUserBook(StartOrReserveMakeTeaReqDTO startOrReserveTeaReq, UserVipEntity user) {
+		UserBookEntity userBook = new UserBookEntity();
+		userBook.setTeamanId(user.getMemberId().toString());
+		userBook.setDeviceId(Integer.valueOf(startOrReserveTeaReq.getDeviceId()));
+		userBook.setConfigCmd("AA0B012C0F89025A023CCC"); // TODO 需要确定这个值怎么取
+		userBook.setProcessTime(new Date());
+		userBook.setLogTime(new Date());
+		userBook.setValidFlag(Constant.UserBookStatus.VALID);
+		userBook.setChapuId(0);
+		userBook.setInformFlag(0);
+		userBook.setTeaSortId(startOrReserveTeaReq.getTeaSortId());
+		userBook.setTeaSortName(startOrReserveTeaReq.getTeaSortName());
+		userBook.setReservNo("MT" + DateUtils.currentDateStr(DateUtils.DATE_TIME_PATTERN2));
+		return userBook;
+	}
+
+	private UserMakeTeaEntity buildUserMakeTea(StartOrReserveMakeTeaReqDTO startOrReserveTeaReq, UserVipEntity user, DeviceHttpResp devHttpResp) {
+		UserMakeTeaEntity userMakeTea = new UserMakeTeaEntity();
+		userMakeTea.setTeamanId(user.getMemberId().toString());
+		userMakeTea.setDeviceId(Integer.valueOf(startOrReserveTeaReq.getDeviceId()));
+		userMakeTea.setChapuId(0);
+		userMakeTea.setMaxNum(0);
+		userMakeTea.setMakeIndex(0);
+		userMakeTea.setAddTime(new Date());
+		userMakeTea.setStatus(devHttpResp.getMsg().getState()); // TODO 先使用接口返回的状态值
+		userMakeTea.setTemperature(startOrReserveTeaReq.getTemperature());
+		userMakeTea.setWarm(0);
+		userMakeTea.setSoak(startOrReserveTeaReq.getSoak());
+		userMakeTea.setTeaSortId(startOrReserveTeaReq.getTeaSortId());
+		userMakeTea.setTeaSortName(startOrReserveTeaReq.getTeaSortName());
+		userMakeTea.setMakeType(Constant.MakeTeaType.TEA_SPECTRUM);
+		userMakeTea.setBarcode("");
+		userMakeTea.setDensity(0);
+		return userMakeTea;
 	}
 
 	private boolean isStartTea(String startTime) {

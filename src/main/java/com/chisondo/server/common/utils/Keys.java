@@ -36,4 +36,6 @@ public class Keys {
     public static final String OPER_FLAG = "operFlag";
 
     public static final String EXCLUDE_AUTH_URL = "EXCLUDE_AUTH_URL";
+
+    public static final Object RESERV_NO = "reservNo";
 }
