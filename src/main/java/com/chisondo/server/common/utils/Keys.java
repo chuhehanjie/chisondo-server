@@ -37,5 +37,7 @@ public class Keys {
 
     public static final String EXCLUDE_AUTH_URL = "EXCLUDE_AUTH_URL";
 
-    public static final Object RESERV_NO = "reservNo";
+    public static final String RESERV_NO = "reservNo";
+
+    public static final String SESSION_ID = "sessionId";
 }

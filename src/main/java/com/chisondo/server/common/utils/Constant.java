@@ -116,4 +116,11 @@ public class Constant {
         int MAX = 600;
     }
 
+    /**
+     * 老设备操作类型
+     */
+    public interface OldDeviceOperType {
+        int START_OR_RESERVE_MAKE_TEA = 1;
+    }
+
 }

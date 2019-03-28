@@ -47,15 +47,15 @@ public final class CommonUtils {
         return false;
     }
 
-   /* public static String getJSONFromRequest(HttpServletRequest request) throws IOException {
-        InputStream inputStream = request.getInputStream();
+   /* public static String getJSONFromRequest(HttpServletRequest req) throws IOException {
+        InputStream inputStream = req.getInputStream();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] bytes = new byte[1024];
         int flag = 0;
         while ((flag = inputStream.read(bytes)) > 0){
             byteArrayOutputStream.write(bytes,0,flag);
         }
-        return new String(byteArrayOutputStream.toByteArray(),request.getCharacterEncoding());
+        return new String(byteArrayOutputStream.toByteArray(),req.getCharacterEncoding());
     }*/
 
     public static void outJSONResponse(HttpServletResponse response, Object obj) {
