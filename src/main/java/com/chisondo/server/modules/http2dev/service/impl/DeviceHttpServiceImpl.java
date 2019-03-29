@@ -2,9 +2,11 @@ package com.chisondo.server.modules.http2dev.service.impl;
 
 import com.chisondo.server.common.utils.Constant;
 import com.chisondo.server.common.utils.RestTemplateUtils;
-import com.chisondo.server.modules.http2dev.request.DeviceHttpReq;
-import com.chisondo.server.modules.http2dev.response.DeviceHttpResp;
-import com.chisondo.server.modules.http2dev.service.Http2DevService;
+import com.chisondo.server.modules.http2dev.req.DeviceHttpReq;
+import com.chisondo.server.modules.http2dev.req.QryDevSettingHttpReq;
+import com.chisondo.server.modules.http2dev.resp.DevSettingHttpResp;
+import com.chisondo.server.modules.http2dev.resp.DeviceHttpResp;
+import com.chisondo.server.modules.http2dev.service.DeviceHttpService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ import org.springframework.web.client.RestClientException;
 
 @Service("http2DevService")
 @Slf4j
-public class Http2DevServiceImpl implements Http2DevService {
+public class DeviceHttpServiceImpl implements DeviceHttpService {
 
     @Autowired
     private RestTemplateUtils restTemplateUtils;
@@ -42,4 +44,12 @@ public class Http2DevServiceImpl implements Http2DevService {
         req.setActionflag(Constant.DevStartWorkAction.MAKE_TEA);
         return this.deviceControl(this.http2DevURL + "makeTea", req);
     }
+
+    @Override
+    public DevSettingHttpResp queryDevSettingInfo(QryDevSettingHttpReq req) {
+        req.setAction("qrydevparm");
+        DevSettingHttpResp resp = this.restTemplateUtils.httpPostMediaTypeJson(this.http2DevURL + "qryDevSetting", DevSettingHttpResp.class, req);
+        return resp;
+    }
+
 }

@@ -150,4 +150,8 @@ public final class CommonUtils {
         devStatusResp.setConnStatus(devStateInfo.getConnectState());
         return devStatusResp;
     }
+
+    public static CommonResp buildOldDevResp(JSONObject result) {
+        return new CommonResp(result.getIntValue("retn"), result.getString("desc"));
+    }
 }

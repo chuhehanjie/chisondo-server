@@ -1,16 +1,17 @@
 package com.chisondo.server.modules.device.dto.resp;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class DevSettingInfoResp implements Serializable {
+public class DevSettingRespDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String deviceName; //设备名称
     private String devicePwd; // 连接密码
     private int isOpenSound; // 是否静音	0-有提示音；1-无提音
-    private WaterParam waterHeat; // 烧水参数
+    private List<WaterHeatInfo> waterHeat; // 烧水参数
 
-    private ChapuInfo chapuInfo; // 茶谱信息
+    private List<TeaSpectrumInfo> chapuInfo; // 茶谱信息
 
     public String getDeviceName() {
         return deviceName;
@@ -36,19 +37,19 @@ public class DevSettingInfoResp implements Serializable {
         this.isOpenSound = isOpenSound;
     }
 
-    public WaterParam getWaterHeat() {
+    public List<WaterHeatInfo> getWaterHeat() {
         return waterHeat;
     }
 
-    public void setWaterHeat(WaterParam waterHeat) {
+    public void setWaterHeat(List<WaterHeatInfo> waterHeat) {
         this.waterHeat = waterHeat;
     }
 
-    public ChapuInfo getChapuInfo() {
+    public List<TeaSpectrumInfo> getChapuInfo() {
         return chapuInfo;
     }
 
-    public void setChapuInfo(ChapuInfo chapuInfo) {
+    public void setChapuInfo(List<TeaSpectrumInfo> chapuInfo) {
         this.chapuInfo = chapuInfo;
     }
 }

@@ -40,4 +40,6 @@ public class Keys {
     public static final String RESERV_NO = "reservNo";
 
     public static final String SESSION_ID = "sessionId";
+
+    public static final String ACTION = "action";
 }

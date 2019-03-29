@@ -1,6 +1,6 @@
-package com.chisondo.server.modules.http2dev.response;
+package com.chisondo.server.modules.http2dev.resp;
 
-public class DeviceHttpMsgResp {
+public class DeviceMsgResp {
     /**
      * 状态值，可扩展
      */

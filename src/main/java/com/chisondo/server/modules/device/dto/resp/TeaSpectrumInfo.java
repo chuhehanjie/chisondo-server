@@ -1,28 +1,28 @@
 package com.chisondo.server.modules.device.dto.resp;
 
-public class ChapuInfo {
-    private int index; // 面板位置	液晶屏中的茶谱顺序
-    private int chapuId; // 茶谱ID
-    private String chapuName; // 茶谱名称
-    private String chapuImg; // 茶谱图标	可为空，显示默认图标
-    private int sortId; // 茶类ID	参考“获取茶类”接口
-    private String sortName; // 茶类名称
-    private int makeTimes; // 泡数	茶谱总泡数
-    private String brandName; // 茶品牌名称	茶叶所属品牌
+public class TeaSpectrumInfo {
+    private	Integer	index	; // 	面板位置	液晶屏中的茶谱顺序
+    private	Integer	chapuId	; // 	茶谱ID
+    private	String	chapuName	; // 	茶谱名称
+    private	String	chapuImg	; // 	茶谱图标	可为空，显示默认图标
+    private	int	sortId	; // 	茶类ID	参考“获取茶类”接口
+    private	String	sortName	; // 	茶类名称
+    private	int	makeTimes	; // 	泡数	茶谱总泡数
+    private	String	brandName	; // 	茶品牌名称	茶叶所属品牌
 
-    public int getIndex() {
+    public Integer getIndex() {
         return index;
     }
 
-    public void setIndex(int index) {
+    public void setIndex(Integer index) {
         this.index = index;
     }
 
-    public int getChapuId() {
+    public Integer getChapuId() {
         return chapuId;
     }
 
-    public void setChapuId(int chapuId) {
+    public void setChapuId(Integer chapuId) {
         this.chapuId = chapuId;
     }
 

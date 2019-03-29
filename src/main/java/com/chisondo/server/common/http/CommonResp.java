@@ -47,6 +47,11 @@ public class CommonResp implements Serializable {
         this.retn = retn;
     }
 
+    public CommonResp(Integer retn, String desc) {
+        this.retn = retn;
+        this.desc = desc;
+    }
+
     public CommonResp(Integer retn, String desc, String bizBody) {
         this.retn = retn;
         this.desc = desc;

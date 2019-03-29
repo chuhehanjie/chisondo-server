@@ -1,4 +1,4 @@
-package com.chisondo.server.modules.http2dev.request;
+package com.chisondo.server.modules.http2dev.req;
 
 import com.chisondo.server.modules.device.dto.req.StartOrReserveMakeTeaReqDTO;
 
@@ -10,14 +10,14 @@ public class DeviceHttpReq implements Serializable {
     private int actionflag;
     private String deviceId;
 
-    private DeviceHttpMsgReq msg;
+    private DeviceMsgHttpReq msg;
 
     public DeviceHttpReq() {
     }
 
     public DeviceHttpReq(StartOrReserveMakeTeaReqDTO startOrReserveTeaReq) {
         this.deviceId = startOrReserveTeaReq.getDeviceId();
-        this.msg = new DeviceHttpMsgReq(startOrReserveTeaReq);
+        this.msg = new DeviceMsgHttpReq(startOrReserveTeaReq);
     }
 
     public String getAction() {
@@ -44,11 +44,11 @@ public class DeviceHttpReq implements Serializable {
         this.deviceId = deviceId;
     }
 
-    public DeviceHttpMsgReq getMsg() {
+    public DeviceMsgHttpReq getMsg() {
         return msg;
     }
 
-    public void setMsg(DeviceHttpMsgReq msg) {
+    public void setMsg(DeviceMsgHttpReq msg) {
         this.msg = msg;
     }
 }

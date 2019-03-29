@@ -1,11 +1,13 @@
 package com.chisondo.server.modules.device.service.impl;
+import com.chisondo.server.modules.device.entity.ActivedDeviceInfoEntity;
+import com.google.common.collect.Lists;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.common.utils.*;
 import com.chisondo.server.modules.device.dto.req.DevStatusReportReq;
-import com.chisondo.server.modules.device.dto.resp.DevSettingInfoResp;
+import com.chisondo.server.modules.device.dto.resp.DevSettingRespDTO;
 import com.chisondo.server.modules.device.dto.resp.DevStatusRespDTO;
 import com.chisondo.server.modules.device.dto.resp.MakeTeaRespDTO;
 import com.chisondo.server.modules.device.dto.resp.MakeTeaRowRespDTO;
@@ -13,6 +15,9 @@ import com.chisondo.server.modules.device.entity.DeviceStateInfoEntity;
 import com.chisondo.server.modules.device.service.ActivedDeviceInfoService;
 import com.chisondo.server.modules.device.service.DeviceQueryService;
 import com.chisondo.server.modules.device.service.DeviceStateInfoService;
+import com.chisondo.server.modules.http2dev.req.QryDevSettingHttpReq;
+import com.chisondo.server.modules.http2dev.resp.DevSettingHttpResp;
+import com.chisondo.server.modules.http2dev.service.DeviceHttpService;
 import com.chisondo.server.modules.user.service.UserMakeTeaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,9 +39,12 @@ public class DeviceQueryServiceImpl implements DeviceQueryService {
 
 	@Autowired
 	private RedisUtils redisUtils;
+
+	@Autowired
+	private DeviceHttpService deviceHttpService;
 	
 	@Override
-	public CommonResp queryDevSettingInfo(String deviceId) {
+	public CommonResp queryDevSettingInfo(CommonReq req) {
 		/*说明	设置内置茶谱参数
 		接口描述	返回洗茶按钮参数 烧水按钮参数 内置茶谱参数，是否静音等。
 		请求示例
@@ -79,7 +87,16 @@ public class DeviceQueryServiceImpl implements DeviceQueryService {
 		soak	数值	0-600	Y	0 - 不浸泡，1~600  沏茶时间(单位:秒)
 		waterlevel	固定数值	8档次	Y	取值为：150 200 250 300 350 400 450 550  8个档次 (单位：毫升ml)
 */
-		DevSettingInfoResp devSettingResp = new DevSettingInfoResp();
+		ActivedDeviceInfoEntity deviceInfo = (ActivedDeviceInfoEntity) req.getAttrByKey(Keys.DEVICE_INFO);
+		DevSettingRespDTO devSettingResp = new DevSettingRespDTO();
+
+		DevSettingHttpResp httpResp = this.deviceHttpService.queryDevSettingInfo(new QryDevSettingHttpReq(req.getAttrByKey(Keys.DEVICE_ID).toString()));
+
+		devSettingResp.setDeviceName(deviceInfo.getDeviceName());
+		devSettingResp.setDevicePwd(deviceInfo.getPassword());
+//		devSettingResp.setIsOpenSound(httpResp.get);
+		devSettingResp.setWaterHeat(Lists.newArrayList());
+		devSettingResp.setChapuInfo(Lists.newArrayList());
 		return CommonResp.ok(devSettingResp);
 	}
 

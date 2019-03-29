@@ -11,9 +11,9 @@ import com.chisondo.server.modules.device.entity.ActivedDeviceInfoEntity;
 import com.chisondo.server.modules.device.service.ActivedDeviceInfoService;
 import com.chisondo.server.modules.device.service.DeviceCtrlService;
 import com.chisondo.server.modules.device.service.DeviceStateInfoService;
-import com.chisondo.server.modules.http2dev.request.DeviceHttpReq;
-import com.chisondo.server.modules.http2dev.response.DeviceHttpResp;
-import com.chisondo.server.modules.http2dev.service.Http2DevService;
+import com.chisondo.server.modules.http2dev.req.DeviceHttpReq;
+import com.chisondo.server.modules.http2dev.resp.DeviceHttpResp;
+import com.chisondo.server.modules.http2dev.service.DeviceHttpService;
 import com.chisondo.server.modules.user.entity.UserBookEntity;
 import com.chisondo.server.modules.user.entity.UserMakeTeaEntity;
 import com.chisondo.server.modules.user.entity.UserVipEntity;
@@ -56,7 +56,7 @@ public class DeviceCtrlServiceImpl implements DeviceCtrlService {
 	private UserBookService userBookService;
 
 	@Autowired
-	private Http2DevService http2DevService;
+	private DeviceHttpService deviceHttpService;
 
 	@Override
 	public CommonResp startOrReserveMakeTea(CommonReq req) {
@@ -72,7 +72,7 @@ public class DeviceCtrlServiceImpl implements DeviceCtrlService {
 			/*新设备非预约泡茶直接入4.5.3用户泡茶表；预约泡茶入4.5.4用户预约泡茶表，后端由定时程序根据预约时间自动启动泡茶信息，修改4.5.4表记录状态，
 			并将泡茶信息插入4.5.3用户泡茶表；*/
 			DeviceHttpReq devHttpReq = new DeviceHttpReq(startOrReserveTeaReq);
-			DeviceHttpResp devHttpResp = this.http2DevService.makeTea(devHttpReq);
+			DeviceHttpResp devHttpResp = this.deviceHttpService.makeTea(devHttpReq);
 			if (devHttpResp.isOK()) {
 				UserMakeTeaEntity userMakeTea = this.buildUserMakeTea(startOrReserveTeaReq, user, devHttpResp);
 				this.userMakeTeaService.save(userMakeTea);
@@ -172,7 +172,8 @@ public class DeviceCtrlServiceImpl implements DeviceCtrlService {
 	}
 
 	@Override
-	public CommonResp washTea(WashTeaReqDTO washTeaReq) {
+	public CommonResp washTea(CommonReq req) {
+		WashTeaReqDTO washTeaReq = JSONObject.parseObject(req.getBizBody(), WashTeaReqDTO.class);
 		// TODO 直接调用接口服务
 		log.info("washTea ok");
 		return CommonResp.ok();

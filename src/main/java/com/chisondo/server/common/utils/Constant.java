@@ -121,6 +121,11 @@ public class Constant {
      */
     public interface OldDeviceOperType {
         int START_OR_RESERVE_MAKE_TEA = 1;
+        int WASH_TEA = 2;
+        int STOP_MAKE_TEA = 3;
+        int USE_TEA_SPECTRUM = 4;
+        int CANCEL_TEA_SPECTRUM = 5;
+        int WARM_CONTROL = 6;
     }
 
 }

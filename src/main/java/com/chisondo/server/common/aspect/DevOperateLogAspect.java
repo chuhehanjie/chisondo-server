@@ -58,17 +58,24 @@ public class DevOperateLogAspect {
 		long callTime = endTime - startTime;
 		Method method = this.getCallMethod(point);
 		log.error("执行业务方法 [{}] 共耗时 {} 毫秒",method.getName() , callTime);
-		DevOperateLog devOperateLog = method.getAnnotation(DevOperateLog.class);
-		if (devOperateLog.asyncCall()) {
-			ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1,
-					new BasicThreadFactory.Builder().namingPattern("scheduled-pool-%d").daemon(true).build());
-			scheduledExecutorService.execute(() -> this.saveDevOperateLog(point, result, startTime, endTime, devOperateLog.value()));
-		} else {
-			//保存设备操作日志
-			this.saveDevOperateLog(point, result, startTime, endTime, devOperateLog.value());
+		if (!this.isOldDev(point)) {
+			// 不是老设备才记录操作日志
+			DevOperateLog devOperateLog = method.getAnnotation(DevOperateLog.class);
+			if (devOperateLog.asyncCall()) {
+				ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1,
+						new BasicThreadFactory.Builder().namingPattern("scheduled-pool-%d").daemon(true).build());
+				scheduledExecutorService.execute(() -> this.saveDevOperateLog(point, result, startTime, endTime, devOperateLog.value()));
+			} else {
+				//保存设备操作日志
+				this.saveDevOperateLog(point, result, startTime, endTime, devOperateLog.value());
+			}
 		}
-
 		return result;
+	}
+
+	private boolean isOldDev(ProceedingJoinPoint point) {
+		CommonReq req = (CommonReq) point.getArgs()[0];
+		return req.isOldDev();
 	}
 
 	private Method getCallMethod(ProceedingJoinPoint point) {
@@ -78,22 +85,21 @@ public class DevOperateLogAspect {
 	}
 
 	private void saveDevOperateLog(ProceedingJoinPoint joinPoint, Object result, long startTime, long endTime, String methodDesc) {
-		CommonReq commonReq = (CommonReq) joinPoint.getArgs()[0];
-		CommonResp commonResp = (CommonResp) result;
-		UserVipEntity user = (UserVipEntity) commonReq.getAttrByKey(Keys.USER_INFO);
-		ActivedDeviceInfoEntity deviceInfo = (ActivedDeviceInfoEntity) commonReq.getAttrByKey(Keys.DEVICE_INFO);
+		CommonReq req = (CommonReq) joinPoint.getArgs()[0];
+		CommonResp resp = (CommonResp) result;
+		UserVipEntity user = (UserVipEntity) req.getAttrByKey(Keys.USER_INFO);
+		ActivedDeviceInfoEntity deviceInfo = (ActivedDeviceInfoEntity) req.getAttrByKey(Keys.DEVICE_INFO);
 		DeviceOperateLogEntity devOperateLog = new DeviceOperateLogEntity();
 		devOperateLog.setDeviceId(deviceInfo.getDeviceId());
 		devOperateLog.setTeamanId(user.getMemberId() + "");
 		devOperateLog.setUserMobileNo(user.getPhone());
 		devOperateLog.setOperType(0); // TODO 操作类型未定义
-		devOperateLog.setReqContent(JSONObject.toJSONString(commonReq));
-		devOperateLog.setResContent(JSONObject.toJSONString(commonResp));
+		devOperateLog.setReqContent(JSONObject.toJSONString(req));
+		devOperateLog.setResContent(JSONObject.toJSONString(resp));
 		devOperateLog.setStartTime(new Date(startTime));
 		devOperateLog.setEndTime(new Date(endTime));
 		devOperateLog.setDesc(methodDesc);
-		devOperateLog.setOperResult(commonResp.getRetn() == HttpStatus.SC_OK ? Constant.RespResult.SUCCESS : Constant.RespResult.FAILED);
-
+		devOperateLog.setOperResult(resp.getRetn() == HttpStatus.SC_OK ? Constant.RespResult.SUCCESS : Constant.RespResult.FAILED);
 		this.devOperateLogService.save(devOperateLog);
 	}
 }

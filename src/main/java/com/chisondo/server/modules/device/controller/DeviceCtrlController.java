@@ -6,11 +6,15 @@ import com.chisondo.server.common.annotation.ParamValidator;
 import com.chisondo.server.common.core.AbstractController;
 import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
+import com.chisondo.server.common.utils.CommonUtils;
+import com.chisondo.server.common.utils.Constant;
 import com.chisondo.server.common.utils.Keys;
 import com.chisondo.server.modules.device.dto.req.*;
 import com.chisondo.server.modules.device.dto.resp.DeviceBindRespDTO;
 import com.chisondo.server.modules.device.service.DeviceCtrlService;
 import com.chisondo.server.modules.device.validator.*;
+import com.chisondo.server.modules.olddevice.service.OldDeviceCtrlService;
+import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +31,10 @@ public class DeviceCtrlController extends AbstractController {
 
 	@Autowired
 	private DeviceCtrlService deviceCtrlService;
+
+	@Autowired
+	private OldDeviceCtrlService oldDevCtrlService;
+
 	/**
 	 * 启动或预约泡茶
 	 * 设置参数并启动泡茶，或提前预约在指定的时间开始沏茶，按茶类沏茶或自己设置参数沏茶，非茶谱沏茶
@@ -37,6 +45,10 @@ public class DeviceCtrlController extends AbstractController {
 	public CommonResp startOrReserveMakeTea(@RequestBody CommonReq req){
 		if (req.isOldDev()) {
 			// TODO 走老设备流程
+			JSONObject result = this.oldDevCtrlService.service(req, Constant.OldDeviceOperType.START_OR_RESERVE_MAKE_TEA);
+			CommonResp resp = CommonUtils.buildOldDevResp(result);
+			resp.setBizBody(JSONObject.toJSONString(ImmutableMap.of("bizBody", result.get(Keys.RESERV_NO))));
+			return resp;
 		}
         return this.deviceCtrlService.startOrReserveMakeTea(req);
 	}
@@ -48,8 +60,12 @@ public class DeviceCtrlController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/api/rest/washTea")
+	@ParamValidator({UserDevRelaValidator.class})
 	public CommonResp washTea(@RequestBody CommonReq req){
-		WashTeaReqDTO washTeaReq = JSONObject.parseObject(req.getBizBody(), WashTeaReqDTO.class);
+		if (req.isOldDev()) {
+			JSONObject result = this.oldDevCtrlService.service(req, Constant.OldDeviceOperType.WASH_TEA);
+			return CommonUtils.buildOldDevResp(result);
+		}
 		/*
 		deviceId	Y	String	设备ID
 		phoneNum	Y	String	手机号码	设备绑定的手机号码
@@ -64,7 +80,7 @@ public class DeviceCtrlController extends AbstractController {
 		retn	Y	Integer	返回码
 		Desc	Y	String	返回描述
 		*/
-		return this.deviceCtrlService.washTea(washTeaReq);
+		return this.deviceCtrlService.washTea(req);
 	}
 
 	/**

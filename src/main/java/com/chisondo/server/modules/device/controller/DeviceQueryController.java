@@ -39,7 +39,6 @@ public class DeviceQueryController extends AbstractController {
 	@RequestMapping("/api/rest/qryDevStatus")
 	@ParamValidator({DevExistenceValidator.class})
 	public CommonResp queryDeviceStatus(@RequestBody CommonReq req) {
-		// TODO 直接从 redis 查询设备状态
 		return this.deviceQueryService.queryDevStateInfo(req);
 	}
 
@@ -49,11 +48,8 @@ public class DeviceQueryController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping("/api/rest/qryDeviceSetInfo")
+	@ParamValidator({DevExistenceValidator.class})
 	public CommonResp queryDevSettingInfo(@RequestBody CommonReq req) {
-		JSONObject jsonObj = JSONObject.parseObject(req.getBizBody());
-		if (ValidateUtils.isEmpty(jsonObj) || ValidateUtils.isEmptyString(jsonObj.getString(Keys.DEVICE_ID))) {
-			throw new CommonException("设备ID为空");
-		}
 		/*retn	Y	Integer	返回码
 		desc	Y	String	返回描述
 		deviceName	Y	String	设备名称
@@ -73,9 +69,7 @@ public class DeviceQueryController extends AbstractController {
 		makeTimes	Y	int	泡数	茶谱总泡数
 		brandName	Y	String	茶品牌名称	茶叶所属品牌*/
 
-		String deviceId = jsonObj.getString(Keys.DEVICE_ID);
-		// TODO 直接从 redis 查询设备状态
-		return this.deviceInfoService.queryDevSettingInfo(deviceId);
+		return this.deviceQueryService.queryDevSettingInfo(req);
 	}
 
 	/**

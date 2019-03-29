@@ -1,11 +1,11 @@
 package com.chisondo.server.modules.device.service;
 
+import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.modules.device.dto.req.SetDevNameReqDTO;
 import com.chisondo.server.modules.device.dto.req.SetDevPwdReqDTO;
 import com.chisondo.server.modules.device.dto.req.SetDevSoundReqDTO;
 import com.chisondo.server.modules.device.entity.ActivedDeviceInfoEntity;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -32,8 +32,6 @@ public interface ActivedDeviceInfoService {
 	void delete(Integer deviceId);
 	
 	void deleteBatch(Integer[] deviceIds);
-
-	CommonResp queryDevSettingInfo(String deviceId);
 
     CommonResp queryHisConnectDevOfUser(String userMobile);
 

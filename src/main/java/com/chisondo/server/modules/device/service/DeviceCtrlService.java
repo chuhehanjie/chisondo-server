@@ -30,11 +30,11 @@ public interface DeviceCtrlService {
 
 	/**
 	 * 洗茶控制
-	 * @param washTeaReq
+	 * @param req
 	 * @return
 	 */
 	@Transactional
-    CommonResp washTea(WashTeaReqDTO washTeaReq);
+    CommonResp washTea(CommonReq req);
 
 	@Transactional
 	CommonResp boilWater(BoilWaterReqDTO boilWaterReq);
