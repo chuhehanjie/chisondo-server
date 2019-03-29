@@ -23,8 +23,8 @@ public class DevStatusRespDTO implements Serializable {
     private Integer	chapuId	; // 	没有在使用茶谱返回0
     private String	chapuName	; //
     private String	chapuImage	; //
-    private int	chapuMakeTimes	; //
-    private int	index	; // 	>0：当前正在进行的是第几泡;-1：没有正在使用的茶谱;0：已完成茶谱最大泡数，下一步开始第1泡;999：茶谱正常结束
+    private Integer	chapuMakeTimes	; //
+    private Integer	index	; // 	>0：当前正在进行的是第几泡;-1：没有正在使用的茶谱;0：已完成茶谱最大泡数，下一步开始第1泡;999：茶谱正常结束
 
     public Integer getConnStatus() {
         return connStatus;
@@ -170,19 +170,19 @@ public class DevStatusRespDTO implements Serializable {
         this.chapuImage = chapuImage;
     }
 
-    public int getChapuMakeTimes() {
+    public Integer getChapuMakeTimes() {
         return chapuMakeTimes;
     }
 
-    public void setChapuMakeTimes(int chapuMakeTimes) {
+    public void setChapuMakeTimes(Integer chapuMakeTimes) {
         this.chapuMakeTimes = chapuMakeTimes;
     }
 
-    public int getIndex() {
+    public Integer getIndex() {
         return index;
     }
 
-    public void setIndex(int index) {
+    public void setIndex(Integer index) {
         this.index = index;
     }
 }

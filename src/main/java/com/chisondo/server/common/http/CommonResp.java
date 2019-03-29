@@ -1,6 +1,7 @@
 package com.chisondo.server.common.http;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.apache.http.HttpStatus;
 
 import java.io.Serializable;
@@ -24,7 +25,7 @@ public class CommonResp implements Serializable {
     private String bizBody;
 
     public static CommonResp ok(Object obj) {
-        return new CommonResp(HttpStatus.SC_OK, "success", JSONObject.toJSONString(obj));
+        return new CommonResp(HttpStatus.SC_OK, "success", JSONObject.toJSONString(obj, SerializerFeature.WriteMapNullValue));
     }
 
     public static CommonResp error(String errMsg) {

@@ -94,11 +94,29 @@ public class DeviceStateInfoServiceImpl implements DeviceStateInfoService {
 	}
 
 	private DeviceStateInfoEntity buildDevStateInfo(DevStatusReportReq devStatusReportReq) {
-        DeviceStateInfoEntity devStateInfo = CommonUtils.convert2DevStatusInfo(devStatusReportReq, devStateInfo);
+        DeviceStateInfoEntity devStateInfo = this.convert2DevStatusInfo(devStatusReportReq);
 		devStateInfo.setOnlineState(Constant.OnlineState.YES);
 		devStateInfo.setConnectState(Constant.ConnectState.CONNECTED);
 		devStateInfo.setUpdateTime(new Date());
 		devStateInfo.setLastConnTime(new Date());
+		return devStateInfo;
+	}
+
+	public DeviceStateInfoEntity convert2DevStatusInfo(DevStatusReportReq devStatusReportReq) {
+		DeviceStateInfoEntity devStateInfo = new DeviceStateInfoEntity();
+		devStateInfo.setDeviceId(Integer.valueOf(devStatusReportReq.getDeviceID()));
+//		devStateInfo.setDeviceStateInfo("");
+		devStateInfo.setLastValTime(devStatusReportReq.getTcpValTime());
+		devStateInfo.setMakeTemp(devStatusReportReq.getMsg().getTemperature());
+		devStateInfo.setTemp(devStatusReportReq.getMsg().getTemperature());
+		devStateInfo.setWarm(devStatusReportReq.getMsg().getWarmstatus());
+		devStateInfo.setDensity(devStatusReportReq.getMsg().getTaststatus());
+		devStateInfo.setWaterlv(devStatusReportReq.getMsg().getWaterlevel());
+		devStateInfo.setMakeDura(devStatusReportReq.getMsg().getSoak());
+		devStateInfo.setReamin(Integer.valueOf(devStatusReportReq.getMsg().getRemaintime()));
+		devStateInfo.setTea(Constant.ErrorStatus.LACK_TEA == devStatusReportReq.getMsg().getErrorstatus() ? 1 : 0);
+		devStateInfo.setWater(Constant.ErrorStatus.LACK_WATER == devStatusReportReq.getMsg().getErrorstatus() ? 1 : 0);
+		devStateInfo.setWork(devStatusReportReq.getMsg().getWorkstatus());
 		return devStateInfo;
 	}
 
