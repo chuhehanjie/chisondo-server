@@ -2,11 +2,8 @@ package com.chisondo.server.modules.device.service.impl;
 import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
-import com.chisondo.server.common.http.CommonReq;
-import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.common.utils.CommonUtils;
 import com.chisondo.server.common.utils.Constant;
-import com.chisondo.server.common.utils.Keys;
 import com.chisondo.server.common.utils.ValidateUtils;
 import com.chisondo.server.modules.device.dto.req.DevStatusReportReq;
 import com.chisondo.server.modules.device.dto.req.DeviceBindReqDTO;
@@ -97,7 +94,7 @@ public class DeviceStateInfoServiceImpl implements DeviceStateInfoService {
 	}
 
 	private DeviceStateInfoEntity buildDevStateInfo(DevStatusReportReq devStatusReportReq) {
-        DeviceStateInfoEntity devStateInfo = CommonUtils.convert2DevStateInfo(devStatusReportReq);
+        DeviceStateInfoEntity devStateInfo = CommonUtils.convert2DevStatusInfo(devStatusReportReq, devStateInfo);
 		devStateInfo.setOnlineState(Constant.OnlineState.YES);
 		devStateInfo.setConnectState(Constant.ConnectState.CONNECTED);
 		devStateInfo.setUpdateTime(new Date());

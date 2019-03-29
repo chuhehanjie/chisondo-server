@@ -4,11 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.chisondo.server.common.http.CommonReq;
 import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.modules.device.dto.req.DevStatusReportReq;
+import com.chisondo.server.modules.device.dto.resp.DevStatusRespDTO;
 import com.chisondo.server.modules.device.entity.DeviceStateInfoEntity;
 import com.google.common.collect.Maps;
 import org.apache.commons.io.IOUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.HashMap;
@@ -103,21 +103,51 @@ public final class CommonUtils {
         return params;
     }
 
-    public static DeviceStateInfoEntity convert2DevStateInfo(DevStatusReportReq devStatusReportReq) {
-        DeviceStateInfoEntity devStateInfo = new DeviceStateInfoEntity();
-        devStateInfo.setDeviceId(Integer.valueOf(devStatusReportReq.getDeviceID()));
-//		devStateInfo.setDeviceStateInfo("");
-        devStateInfo.setLastValTime(devStatusReportReq.getTcpValTime());
-        devStateInfo.setMakeTemp(devStatusReportReq.getMsg().getTemperature());
-        devStateInfo.setTemp(devStatusReportReq.getMsg().getTemperature());
-        devStateInfo.setWarm(devStatusReportReq.getMsg().getWarmstatus());
-        devStateInfo.setDensity(devStatusReportReq.getMsg().getTaststatus());
-        devStateInfo.setWaterlv(devStatusReportReq.getMsg().getWaterlevel());
-        devStateInfo.setMakeDura(devStatusReportReq.getMsg().getSoak());
-        devStateInfo.setReamin(Integer.valueOf(devStatusReportReq.getMsg().getRemaintime()));
-        devStateInfo.setTea(Constant.ErrorStatus.LACK_TEA == devStatusReportReq.getMsg().getErrorstatus() ? 1 : 0);
-        devStateInfo.setWater(Constant.ErrorStatus.LACK_WATER == devStatusReportReq.getMsg().getErrorstatus() ? 1 : 0);
-        devStateInfo.setWork(devStatusReportReq.getMsg().getWorkstatus());
-        return devStateInfo;
+    public static DevStatusRespDTO convert2DevStatusInfo(DevStatusReportReq devStatusReportReq, DeviceStateInfoEntity devStateInfo) {
+        DevStatusRespDTO devStatusResp = new DevStatusRespDTO();
+        devStatusResp.setTemp(devStatusReportReq.getMsg().getTemperature());
+        devStatusResp.setWarm(devStatusReportReq.getMsg().getWarmstatus());
+        devStatusResp.setDensity(devStatusReportReq.getMsg().getTaststatus());
+        devStatusResp.setWaterlv(devStatusReportReq.getMsg().getWaterlevel());
+        devStatusResp.setMakeDura(devStatusReportReq.getMsg().getSoak());
+        devStatusResp.setReamin(Integer.valueOf(devStatusReportReq.getMsg().getRemaintime()));
+        devStatusResp.setTea(Constant.ErrorStatus.LACK_TEA == devStatusReportReq.getMsg().getErrorstatus() ? 1 : 0);
+        devStatusResp.setWater(Constant.ErrorStatus.LACK_WATER == devStatusReportReq.getMsg().getErrorstatus() ? 1 : 0);
+        devStatusResp.setWork(devStatusReportReq.getMsg().getWorkstatus());
+        devStatusResp.setMakeTemp(devStateInfo.getMakeTemp());
+        devStatusResp.setChapuId(devStateInfo.getChapuId());
+        devStatusResp.setChapuName(devStateInfo.getChapuName());
+        devStatusResp.setChapuImage(devStateInfo.getChapuImage());
+        devStatusResp.setChapuMakeTimes(devStateInfo.getChapuMakeTimes());
+        devStatusResp.setTeaSortId(devStateInfo.getTeaSortId());
+        devStatusResp.setTeaSortName(devStateInfo.getTeaSortName());
+        devStatusResp.setIndex(devStateInfo.getIndex());
+        devStatusResp.setMakeType(devStateInfo.getMakeType());
+        return devStatusResp;
+    }
+
+    public static DevStatusRespDTO convert2DevStatusInfo(DeviceStateInfoEntity devStateInfo) {
+        DevStatusRespDTO devStatusResp = new DevStatusRespDTO();
+        devStatusResp.setMakeTemp(devStateInfo.getMakeTemp());
+        devStatusResp.setTemp(devStateInfo.getTemp());
+        devStatusResp.setWarm(devStateInfo.getWarm());
+        devStatusResp.setDensity(devStateInfo.getDensity());
+        devStatusResp.setWaterlv(devStateInfo.getWaterlv());
+        devStatusResp.setMakeDura(devStateInfo.getMakeDura());
+        devStatusResp.setReamin(devStateInfo.getReamin());
+        devStatusResp.setTea(devStateInfo.getTea());
+        devStatusResp.setWater(devStateInfo.getWater());
+        devStatusResp.setWork(devStateInfo.getWork());
+        devStatusResp.setChapuId(devStateInfo.getChapuId());
+        devStatusResp.setChapuName(devStateInfo.getChapuName());
+        devStatusResp.setChapuImage(devStateInfo.getChapuImage());
+        devStatusResp.setChapuMakeTimes(devStateInfo.getChapuMakeTimes());
+        devStatusResp.setTeaSortId(devStateInfo.getTeaSortId());
+        devStatusResp.setTeaSortName(devStateInfo.getTeaSortName());
+        devStatusResp.setIndex(devStateInfo.getIndex());
+        devStatusResp.setMakeType(devStateInfo.getMakeType());
+        devStatusResp.setOnlineStatus(devStateInfo.getOnlineState());
+        devStatusResp.setConnStatus(devStateInfo.getConnectState());
+        return devStatusResp;
     }
 }

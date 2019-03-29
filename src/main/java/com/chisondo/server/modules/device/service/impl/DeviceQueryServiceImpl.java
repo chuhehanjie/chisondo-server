@@ -6,6 +6,7 @@ import com.chisondo.server.common.http.CommonResp;
 import com.chisondo.server.common.utils.*;
 import com.chisondo.server.modules.device.dto.req.DevStatusReportReq;
 import com.chisondo.server.modules.device.dto.resp.DevSettingInfoResp;
+import com.chisondo.server.modules.device.dto.resp.DevStatusRespDTO;
 import com.chisondo.server.modules.device.dto.resp.MakeTeaRespDTO;
 import com.chisondo.server.modules.device.dto.resp.MakeTeaRowRespDTO;
 import com.chisondo.server.modules.device.entity.DeviceStateInfoEntity;
@@ -13,7 +14,6 @@ import com.chisondo.server.modules.device.service.ActivedDeviceInfoService;
 import com.chisondo.server.modules.device.service.DeviceQueryService;
 import com.chisondo.server.modules.device.service.DeviceStateInfoService;
 import com.chisondo.server.modules.user.service.UserMakeTeaService;
-import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -110,14 +110,16 @@ public class DeviceQueryServiceImpl implements DeviceQueryService {
 		String devStateInfoStr = this.redisUtils.get(deviceId);
 		if (ValidateUtils.isNotEmptyString(devStateInfoStr)) {
 			DevStatusReportReq devStatusReportReq = JSONObject.parseObject(devStateInfoStr, DevStatusReportReq.class);
-			DeviceStateInfoEntity devStateInfo = CommonUtils.convert2DevStateInfo(devStatusReportReq);
-			devStateInfo.setOnlineState(Constant.OnlineState.YES);
-			devStateInfo.setConnectState(Constant.ConnectState.CONNECTED);
-			return CommonResp.ok(devStateInfo);
+			DeviceStateInfoEntity devStateInfo = this.deviceStateInfoService.queryObject(deviceId);
+			DevStatusRespDTO devStatusResp = CommonUtils.convert2DevStatusInfo(devStatusReportReq, devStateInfo);
+			devStatusResp.setOnlineStatus(Constant.OnlineState.YES);
+			devStatusResp.setConnStatus(Constant.ConnectState.CONNECTED);
+			return CommonResp.ok(devStatusResp);
 		} else {
 			// 从数据库中取
 			DeviceStateInfoEntity devStateInfo = this.deviceStateInfoService.queryObject(deviceId);
-			return CommonResp.ok(devStateInfo);
+			DevStatusRespDTO devStatusResp = CommonUtils.convert2DevStatusInfo(devStateInfo);
+			return CommonResp.ok(devStatusResp);
 		}
 	}
 }
