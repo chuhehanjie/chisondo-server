@@ -43,15 +43,18 @@ public class ValidatorAspect {
 
 		MethodSignature methodSignature = (MethodSignature) point.getSignature();
 		Method method = methodSignature.getMethod();
-		CommonReq commonReq = (CommonReq) point.getArgs()[0];
-		// 取出设备ID 判断是否老设备，则不需要校验
-		if (this.isOldDev(commonReq.getBizBody())) {
-			commonReq.setOldDev(true);
-			System.out.println("老设备不需要校验！");
-		} else {
-
-		}
 		ParamValidator validatorAnnotation = method.getAnnotation(ParamValidator.class);
+		CommonReq commonReq = (CommonReq) point.getArgs()[0];
+		// 不是查询类的校验，则需要判断是否老设备
+		if (!validatorAnnotation.isQuery()) {
+			// 取出设备ID 判断是否老设备，则不需要校验
+			if (this.isOldDev(commonReq.getBizBody())) {
+				commonReq.setOldDev(true);
+				System.out.println("老设备不需要校验！");
+			} else {
+
+			}
+		}
 		if (ValidateUtils.isNotEmpty(validatorAnnotation)) {
 			Class<? extends BusiValidator>[] validators = validatorAnnotation.value();
 			for (Class<? extends BusiValidator> validator : validators) {
@@ -71,6 +74,6 @@ public class ValidatorAspect {
 			throw new CommonException("设备ID为空");
 		}
 		// TODO 老设备规则待定
-		return deviceId.length() == 8;
+		return deviceId.length() <= 8;
 	}
 }
